@@ -25,7 +25,6 @@ using EU.Europa.EC.Markt.Dss.Validation.Ocsp;
 //using Org.BouncyCastle.Jce.Provider;
 using Org.BouncyCastle.Ocsp;
 using Sharpen;
-using iTextSharp.text.log;
 using Org.BouncyCastle.X509;
 //using Sharpen.Logging;
 
@@ -36,9 +35,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Ocsp
 	/// 	</version>
 	public class OCSPCertificateVerifier : CertificateStatusVerifier
 	{
-		private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Validation.Ocsp.OCSPCertificateVerifier
-			).FullName);
-
 		private readonly IOcspSource ocspSource;
 
 		/// <summary>Create a CertificateVerifier that will use the OCSP Source for checking revocation data.
@@ -64,7 +60,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Ocsp
 			status.IssuerCertificate = certificate;
 			if (ocspSource == null)
 			{
-				LOG.Warn("OCSPSource null");
+				//LOG.Warn("OCSPSource null");
 				return null;
 			}
 			try
@@ -73,7 +69,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Ocsp
 					);
 				if (null == ocspResp)
 				{
-					LOG.Info("OCSP response not found");
+					//LOG.Info("OCSP response not found");
 					return null;
 				}
 				BasicOcspResp basicOCSPResp = (BasicOcspResp)ocspResp;
@@ -88,27 +84,27 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Ocsp
 						continue;
 					}
 					DateTime thisUpdate = singleResp.ThisUpdate;
-					LOG.Info("OCSP thisUpdate: " + thisUpdate);
-					LOG.Info("OCSP nextUpdate: " + singleResp.NextUpdate);
+					//LOG.Info("OCSP thisUpdate: " + thisUpdate);
+					//LOG.Info("OCSP nextUpdate: " + singleResp.NextUpdate);
 					status.StatusSourceType = ValidatorSourceType.OCSP;
 					status.StatusSource = ocspResp;
 					status.RevocationObjectIssuingTime = ocspResp.ProducedAt;
 					if (null == singleResp.GetCertStatus())
 					{
-						LOG.Info("OCSP OK for: " + childCertificate.SubjectDN);
+						//LOG.Info("OCSP OK for: " + childCertificate.SubjectDN);
 						status.Validity = CertificateValidity.VALID;
 					}
 					else
 					{
-						LOG.Info("OCSP certificate status: " + singleResp.GetCertStatus().GetType().FullName
-							);
+						//LOG.Info("OCSP certificate status: " + singleResp.GetCertStatus().GetType().FullName
+						//	);
 						if (singleResp.GetCertStatus() is RevokedStatus)
 						{
-							LOG.Info("OCSP status revoked");
+							//LOG.Info("OCSP status revoked");
 							if (validationDate.CompareTo(((RevokedStatus)singleResp.GetCertStatus()).RevocationTime) < 0) //jbonilla - Before
 							{
-								LOG.Info("OCSP revocation time after the validation date, the certificate was valid at "
-									 + validationDate);
+								//LOG.Info("OCSP revocation time after the validation date, the certificate was valid at "
+								//	 + validationDate);
 								status.Validity = CertificateValidity.VALID;
 							}
 							else
@@ -121,24 +117,24 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Ocsp
 						{
 							if (singleResp.GetCertStatus() is UnknownStatus)
 							{
-								LOG.Info("OCSP status unknown");
+								//LOG.Info("OCSP status unknown");
 								status.Validity = CertificateValidity.UNKNOWN;
 							}
 						}
 					}
 					return status;
 				}
-				LOG.Info("no matching OCSP response entry");
+				//LOG.Info("no matching OCSP response entry");
 				return null;
 			}
 			catch (IOException ex)
 			{
-				LOG.Error("OCSP exception: " + ex.Message);
+				//LOG.Error("OCSP exception: " + ex.Message);
 				return null;
 			}
 			catch (OcspException ex)
 			{
-				LOG.Error("OCSP exception: " + ex.Message);
+				//LOG.Error("OCSP exception: " + ex.Message);
 				throw new RuntimeException(ex);
 			}
 		}

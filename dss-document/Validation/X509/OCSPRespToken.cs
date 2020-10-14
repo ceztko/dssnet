@@ -24,7 +24,6 @@ using EU.Europa.EC.Markt.Dss.Validation.X509;
 //using Javax.Security.Auth.X500;
 using Org.BouncyCastle.Ocsp;
 using Sharpen;
-using iTextSharp.text.log;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.X509;
 //using Sharpen.Logging;
@@ -36,9 +35,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation.X509
 	/// 	</version>
 	public class OCSPRespToken : SignedToken
 	{
-		private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Validation.X509.OCSPRespToken
-			).FullName);
-
 		private BasicOcspResp ocspResp;
 
 		/// <summary>The default constructor for OCSPRespToken.</summary>
@@ -72,8 +68,8 @@ namespace EU.Europa.EC.Markt.Dss.Validation.X509
 						return c.SubjectDN;
 					}
 				}
-				LOG.Warn("Don't found an signer for OCSPToken in the " + certs.Count + " certificates "
-					 + certs);
+				//LOG.Warn("Don't found an signer for OCSPToken in the " + certs.Count + " certificates "
+				//	 + certs);
 				return null;
 			}
 		}

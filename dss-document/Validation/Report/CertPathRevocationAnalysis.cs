@@ -34,7 +34,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Report
 	{
 		private Result summary;
 
-		private IList<CertificateVerification> certificatePathVerification = new AList<CertificateVerification
+		private IList<CertificateVerification> certificatePathVerification = new List<CertificateVerification
 			>();
 
 		private TrustedListInformation trustedListInformation;

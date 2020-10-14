@@ -39,7 +39,6 @@ using Org.BouncyCastle.Cms;
 //using Org.BouncyCastle.Jce.Provider;
 using Org.BouncyCastle.Ocsp;
 using Sharpen;
-using iTextSharp.text.log;
 using Org.BouncyCastle.X509;
 using System.Collections.Generic;
 using Org.BouncyCastle.Math;
@@ -66,9 +65,6 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 	/// 	</version>
 	public class CAdESProfileC : CAdESProfileT
 	{
-		private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(CAdESProfileC).FullName
-			);
-
 		protected internal CertificateVerifier certificateVerifier;
 
 		/// <param name="certificateVerifier">the certificateVerifier to set</param>
@@ -89,7 +85,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 		{
             byte[] d = DigestUtilities.CalculateDigest
                 (X509ObjectIdentifiers.IdSha1, cert.GetEncoded());
-			LOG.Info(new DerOctetString(d).ToString());
+			//LOG.Info(new DerOctetString(d).ToString());
 			OtherHash hash = new OtherHash(d);
 			//OtherCertID othercertid = new OtherCertID(new DerSequence(hash.ToAsn1Object()));
             OtherCertID othercertid = new OtherCertID(hash);
@@ -145,8 +141,8 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 			OcspResponsesID ocsprespid = new OcspResponsesID(new OcspIdentifier(ocspResp.ResponderId
 				//.ToAsn1Object(), new DerGeneralizedTime(ocspResp.ProducedAt)), hash);
                 .ToAsn1Object(), ocspResp.ProducedAt), hash);
-			LOG.Info("Incorporate OcspResponseId[hash=" + Hex.ToHexString(digestValue) + 
-				",producedAt=" + ocspResp.ProducedAt);
+			//LOG.Info("Incorporate OcspResponseId[hash=" + Hex.ToHexString(digestValue) + 
+			//	",producedAt=" + ocspResp.ProducedAt);
 			return ocsprespid;
 		}
 
@@ -164,8 +160,8 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 				.CertificateChain), optionalCertificateSource), null, null);
 			try
 			{
-				AList<OtherCertID> completeCertificateRefs = new AList<OtherCertID>();
-				AList<CrlOcspRef> completeRevocationRefs = new AList<CrlOcspRef>();
+				List<OtherCertID> completeCertificateRefs = new List<OtherCertID>();
+				List<CrlOcspRef> completeRevocationRefs = new List<CrlOcspRef>();
 				foreach (CertificateAndContext c in validationContext.GetNeededCertificates())
 				{
 					if (!c.Equals(signingCertificate))
@@ -174,8 +170,8 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 					}
 					// certificateValues.add(new X509CertificateStructure((Asn1Sequence) Asn1Object.fromByteArray(c
 					// .getCertificate().getEncoded())));
-					AList<CrlValidatedID> crlListIdValues = new AList<CrlValidatedID>();
-					AList<OcspResponsesID> ocspListIDValues = new AList<OcspResponsesID>();
+					List<CrlValidatedID> crlListIdValues = new List<CrlValidatedID>();
+					List<OcspResponsesID> ocspListIDValues = new List<OcspResponsesID>();
 					foreach (X509Crl relatedcrl in validationContext.GetRelatedCRLs(c))
 					{
 						crlListIdValues.AddItem(MakeCrlValidatedID((X509Crl)relatedcrl));

@@ -18,7 +18,6 @@
  * "DSS - Digital Signature Services".  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using iTextSharp.text.log;
 using Org.BouncyCastle.X509;
 using System.Collections.Generic;
 
@@ -28,9 +27,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Crl
     /// 	</version>
     public abstract class OfflineCRLSource : ICrlSource
     {
-        private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(OfflineCRLSource).FullName
-            );
-
         public X509Crl FindCrl(X509Certificate certificate, X509Certificate issuerCertificate
             )
         {
@@ -38,12 +34,9 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Crl
             {
                 if (crl.IssuerDN.Equals(issuerCertificate.SubjectDN))
                 {
-                    LOG.Info("CRL found for issuer " + issuerCertificate.SubjectDN.ToString
-                        ());
                     return crl;
                 }
             }
-            LOG.Info("CRL not found for issuer " + issuerCertificate.SubjectDN.ToString());
             return null;
         }
 

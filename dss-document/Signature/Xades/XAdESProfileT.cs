@@ -28,7 +28,6 @@ using EU.Europa.EC.Markt.Dss.Validation.Tsp;
 //using EU.Europa.EC.Markt.Dss.Validation.Xades;
 using Org.BouncyCastle.Tsp;
 using Sharpen;
-using iTextSharp.text.log;
 using Microsoft.Xades;
 using System.Collections;
 using System.Xml;
@@ -45,9 +44,6 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Xades
     /// 	</version>
     public class XAdESProfileT : SignatureExtension
     {
-        private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Signature.Xades.XAdESProfileT
-            ).FullName);
-
         internal ITspSource tspSource;        
 
         /// <summary>The default constructor for XAdESProfileT.</summary>

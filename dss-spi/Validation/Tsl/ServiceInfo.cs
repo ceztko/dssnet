@@ -87,7 +87,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Tsl
         /// <returns></returns>
         public virtual IList<string> GetQualifiers(CertificateAndContext cert)
         {
-            IList<string> list = new AList<string>();
+            IList<string> list = new List<string>();
             foreach (KeyValuePair<string, Condition> e in qualifiersAndConditions.EntrySet())
             {
                 if (e.Value.Check(cert))

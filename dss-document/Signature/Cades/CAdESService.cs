@@ -20,7 +20,6 @@
 
 using EU.Europa.EC.Markt.Dss.Validation;
 using EU.Europa.EC.Markt.Dss.Validation.Tsp;
-using iTextSharp.text.log;
 using Org.BouncyCastle.Asn1.Cms;
 //using Org.Apache.Commons.IO;
 //using Org.BouncyCastle.Cert;
@@ -49,9 +48,6 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
     /// 	</version>
     public class CAdESService : DocumentSignatureService
     {
-        private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Signature.Cades.CAdESService
-            ).FullName);
-
         /// <param name="tspSource">the tspSource to set</param>
         public ITspSource TspSource { get; set; }
 
@@ -323,7 +319,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
             }
             else
             {
-                LOG.Info("No extension for " + parameters.SignatureFormat);
+                //LOG.Info("No extension for " + parameters.SignatureFormat);
             }
             return document;
         }
@@ -372,7 +368,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
                 {
                     generator.AddSigners(originalSignedData.GetSignerInfos());
                 }
-                //ICollection<X509Certificate> certs = new AList<X509Certificate>();
+                //ICollection<X509Certificate> certs = new List<X509Certificate>();
                 IList certs = new ArrayList();
                 //certs.AddItem(parameters.SigningCertificate);
                 certs.Add(parameters.SigningCertificate);

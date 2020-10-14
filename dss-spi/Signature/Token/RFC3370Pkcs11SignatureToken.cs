@@ -249,7 +249,7 @@
 //        /// <exception cref="Sharpen.KeyStoreException"></exception>
 //        public override IList<DSSPrivateKeyEntry> GetKeys()
 //        {
-//            IList<DSSPrivateKeyEntry> list = new AList<DSSPrivateKeyEntry>();
+//            IList<DSSPrivateKeyEntry> list = new List<DSSPrivateKeyEntry>();
 //            try
 //            {
 //                KeyStore keyStore = GetKeyStore();

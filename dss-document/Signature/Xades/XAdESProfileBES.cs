@@ -18,7 +18,6 @@
  * "DSS - Digital Signature Services".  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using iTextSharp.text.log;
 using Microsoft.Xades;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -43,9 +42,6 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Xades
     public class XAdESProfileBES
     {
         private static readonly string XADES_TYPE = "http://uri.etsi.org/01903#SignedProperties";
-
-        private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Signature.Xades.XAdESProfileBES
-            ).FullName);        
 
         /// <summary>The default constructor for XAdESProfileBES.</summary>
         /// <remarks>The default constructor for XAdESProfileBES.</remarks>
@@ -79,7 +75,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Xades
             }
             catch (NoSuchAlgorithmException ex)
             {
-                LOG.Error(ex.Message);
+                //LOG.Error(ex.Message);
                 throw new Exception("MD5 Algorithm not found !");
             }
             catch (CertificateEncodingException)
@@ -238,7 +234,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Xades
             Cert cert;
             SystemX509.X509Certificate2 x509Cert;
 
-            x509Cert = DotNetUtilities.ToX509Certificate2(parameters.SigningCertificate);
+            x509Cert = new SystemX509.X509Certificate2(parameters.SigningCertificate.GetEncoded());
 
             xmlDocument = new XmlDocument();
 
@@ -290,7 +286,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Xades
                     KeyInfoX509Data x509Data = new KeyInfoX509Data();
                     foreach (X509Certificate cert in parameters.CertificateChain)
                     {
-                        x509Data.AddCertificate(DotNetUtilities.ToX509Certificate2(cert));
+                        x509Data.AddCertificate(new SystemX509.X509Certificate2(cert.GetEncoded()));
                         //TODO jbonilla validar más de uno?
                         //break;
                     }

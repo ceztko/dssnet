@@ -1,22 +1,31 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharpen", "Sharpen\Sharpen.csproj", "{72944A6C-45FF-4EF8-B349-8C9CABF519D4}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30611.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharpen", "Sharpen\Sharpen.csproj", "{72944A6C-45FF-4EF8-B349-8C9CABF519D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "itextsharp", "iText\itextsharp.csproj", "{84C4FDD9-3ED7-453B-B9DA-B3ED52CB071C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Xades", "Microsoft.Xades\Microsoft.Xades.csproj", "{EE1DC57A-344A-4B0A-82CE-5FD328C14894}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Xades", "Microsoft.Xades\Microsoft.Xades.csproj", "{EE1DC57A-344A-4B0A-82CE-5FD328C14894}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dss-document", "dss-document\dss-document.csproj", "{66FC8986-C87C-4A2B-92D7-BF50AC8D8C94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dss-document", "dss-document\dss-document.csproj", "{66FC8986-C87C-4A2B-92D7-BF50AC8D8C94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dss-service", "dss-service\dss-service.csproj", "{E326B1E6-D900-4F16-8558-C063DDF2A84D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dss-service", "dss-service\dss-service.csproj", "{E326B1E6-D900-4F16-8558-C063DDF2A84D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dss-spi", "dss-spi\dss-spi.csproj", "{29388317-681F-4C0C-961D-C8E0C6151447}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dss-spi", "dss-spi\dss-spi.csproj", "{29388317-681F-4C0C-961D-C8E0C6151447}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{270E93BD-E849-405B-9E92-8783895BC139}"
 	ProjectSection(SolutionItems) = preProject
 		DSS3-T1-CookBook-v1.05.doc = DSS3-T1-CookBook-v1.05.doc
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BouncyCastle", "BouncyCastle\BouncyCastle.csproj", "{C5C1869F-1030-4CF1-9E67-5F7A633C5FC9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{85D56EDB-6D51-4FAC-A730-BC1CA781E251}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "Sample\Sample.csproj", "{8FE664D3-42DE-4C43-95B1-2611D532047D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,10 +37,6 @@ Global
 		{72944A6C-45FF-4EF8-B349-8C9CABF519D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72944A6C-45FF-4EF8-B349-8C9CABF519D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72944A6C-45FF-4EF8-B349-8C9CABF519D4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{84C4FDD9-3ED7-453B-B9DA-B3ED52CB071C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{84C4FDD9-3ED7-453B-B9DA-B3ED52CB071C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{84C4FDD9-3ED7-453B-B9DA-B3ED52CB071C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{84C4FDD9-3ED7-453B-B9DA-B3ED52CB071C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EE1DC57A-344A-4B0A-82CE-5FD328C14894}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EE1DC57A-344A-4B0A-82CE-5FD328C14894}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE1DC57A-344A-4B0A-82CE-5FD328C14894}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -48,8 +53,19 @@ Global
 		{29388317-681F-4C0C-961D-C8E0C6151447}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29388317-681F-4C0C-961D-C8E0C6151447}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29388317-681F-4C0C-961D-C8E0C6151447}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5C1869F-1030-4CF1-9E67-5F7A633C5FC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5C1869F-1030-4CF1-9E67-5F7A633C5FC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5C1869F-1030-4CF1-9E67-5F7A633C5FC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5C1869F-1030-4CF1-9E67-5F7A633C5FC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FE664D3-42DE-4C43-95B1-2611D532047D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FE664D3-42DE-4C43-95B1-2611D532047D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FE664D3-42DE-4C43-95B1-2611D532047D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FE664D3-42DE-4C43-95B1-2611D532047D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AAB57E4D-32F1-4E06-8598-C6993FCDFB47}
 	EndGlobalSection
 EndGlobal

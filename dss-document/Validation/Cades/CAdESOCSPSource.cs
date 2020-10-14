@@ -76,7 +76,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 
 		public override IList<BasicOcspResp> GetOCSPResponsesFromSignature()
 		{
-			IList<BasicOcspResp> list = new AList<BasicOcspResp>();
+			IList<BasicOcspResp> list = new List<BasicOcspResp>();
 			// Add certificates in CAdES-XL certificate-values inside SignerInfo attribute if present
 			SignerInformation si = cmsSignedData.GetSignerInfos().GetFirstSigner(signerId);
 			if (si != null && si.UnsignedAttributes != null && si.UnsignedAttributes[PkcsObjectIdentifiers.IdAAEtsRevocationValues] != null)

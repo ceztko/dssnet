@@ -51,7 +51,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Xades
 
         public override IList<X509Certificate> GetCertificates()
         {
-            IList<X509Certificate> list = new AList<X509Certificate>();
+            IList<X509Certificate> list = new List<X509Certificate>();
 
             XmlNodeList nodes;
 

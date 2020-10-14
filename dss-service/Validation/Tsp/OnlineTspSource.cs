@@ -27,7 +27,6 @@ using Sharpen;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Utilities.Encoders;
 using EU.Europa.EC.Markt.Dss.Validation.Https;
-using iTextSharp.text.pdf.security;
 using Org.BouncyCastle.Crypto;
 
 namespace EU.Europa.EC.Markt.Dss.Validation.Tsp
@@ -36,21 +35,26 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Tsp
 	/// 	</summary>
 	/// <version>$Revision: 1887 $ - $Date: 2013-04-23 14:56:09 +0200 (mar., 23 avr. 2013) $
 	/// 	</version>
-	public class OnlineTspSource : TSAClientBouncyCastle, ITspSource
+	public class OnlineTspSource : ITspSource
 	{
-    
         public OnlineTspSource(string tspServer)
-            : base(tspServer)
         {            
         }
 
         public OnlineTspSource(string tspServer, string username, string password)
-            : base(tspServer, username, password)
         {            
-        }       
+        }
+
+        public IDigest GetMessageDigest()
+        {
+            throw new NotImplementedException();
+        }
 
         public virtual TimeStampResponse GetTimeStampResponse(DigestAlgorithm algorithm, byte[] digest)
         {
+            throw new NotImplementedException();
+
+            /*
             this.digestAlgorithm = algorithm.GetName();
             byte[] respBytes = null;
 
@@ -66,7 +70,18 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Tsp
 
             // Handle the TSA response
             return new TimeStampResponse(respBytes);
-            
-        }        
+            */
+
+        }
+
+        public byte[] GetTimeStampToken(byte[] imprint)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetTokenSizeEstimate()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

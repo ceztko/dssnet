@@ -51,7 +51,7 @@
 
 //        public override IList<AdvancedSignature> GetSignatures()
 //        {
-//            IList<AdvancedSignature> signatureInfos = new AList<AdvancedSignature>();
+//            IList<AdvancedSignature> signatureInfos = new List<AdvancedSignature>();
 //            NodeList signatureNodeList = this.rootElement.GetElementsByTagNameNS(XMLSignature
 //                .XMLNS, "Signature");
 //            for (int i = 0; i < signatureNodeList.GetLength(); i++)

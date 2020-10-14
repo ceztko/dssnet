@@ -43,7 +43,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Certificate
         public virtual IList<CertificateAndContext> GetCertificateBySubjectName(X509Name
              subjectName)
         {
-            IList<CertificateAndContext> list = new AList<CertificateAndContext>();
+            IList<CertificateAndContext> list = new List<CertificateAndContext>();
             foreach (CertificateSource source in sources)
             {
                 if (source != null)

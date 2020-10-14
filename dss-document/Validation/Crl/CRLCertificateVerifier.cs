@@ -26,7 +26,6 @@ using EU.Europa.EC.Markt.Dss.Validation.Crl;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.X509;
 using Sharpen;
-using iTextSharp.text.log;
 using Org.BouncyCastle.X509;
 using Org.BouncyCastle.Math;
 //using Sharpen.Logging;
@@ -38,9 +37,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Crl
 	/// 	</version>
 	public class CRLCertificateVerifier : CertificateStatusVerifier
 	{
-		private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Validation.Crl.CRLCertificateVerifier
-			).FullName);
-
 		private readonly ICrlSource crlSource;
 
 		/// <summary>Main constructor.</summary>
@@ -62,18 +58,18 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Crl
 				report.IssuerCertificate = certificate;
 				if (crlSource == null)
 				{
-					LOG.Warn("CRLSource null");
+					//LOG.Warn("CRLSource null");
 					return null;
 				}
 				X509Crl x509crl = crlSource.FindCrl(childCertificate, certificate);
 				if (x509crl == null)
 				{
-					LOG.Info("No CRL found for certificate " + childCertificate.SubjectDN);
+					//LOG.Info("No CRL found for certificate " + childCertificate.SubjectDN);
 					return null;
 				}
 				if (!IsCRLValid(x509crl, certificate, validationDate))
 				{
-					LOG.Warn("The CRL is not valid !");
+					//LOG.Warn("The CRL is not valid !");
 					return null;
 				}
 				report.StatusSource = x509crl;
@@ -84,22 +80,22 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Crl
 				X509CrlEntry crlEntry = x509crl.GetRevokedCertificate(childCertificate.SerialNumber);
 				if (null == crlEntry)
 				{
-					LOG.Info("CRL OK for: " + childCertificate.SubjectDN);
+					//LOG.Info("CRL OK for: " + childCertificate.SubjectDN);
 					report.Validity = CertificateValidity.VALID;
 				}
 				else
 				{
 					if (crlEntry.RevocationDate.CompareTo(validationDate) > 0) //jbonilla - After
 					{
-						LOG.Info("CRL OK for: " + childCertificate.SubjectDN + " at " + validationDate
-							);
+						//LOG.Info("CRL OK for: " + childCertificate.SubjectDN + " at " + validationDate
+						//	);
 						report.Validity = CertificateValidity.VALID;
 						report.RevocationObjectIssuingTime = x509crl.ThisUpdate;
 					}
 					else
 					{
-						LOG.Info("CRL reports certificate: " + childCertificate.SubjectDN
-							 + " as revoked since " + crlEntry.RevocationDate);
+						//LOG.Info("CRL reports certificate: " + childCertificate.SubjectDN
+						//+" as revoked since " + crlEntry.RevocationDate);
 						report.Validity = CertificateValidity.REVOKED;
 						report.RevocationObjectIssuingTime = x509crl.ThisUpdate;
 						report.RevocationDate = crlEntry.RevocationDate;
@@ -109,7 +105,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Crl
 			}
 			catch (IOException e)
 			{
-				LOG.Error("IOException when accessing CRL for " + childCertificate.SubjectDN.ToString() + " " + e.Message);
+				//LOG.Error("IOException when accessing CRL for " + childCertificate.SubjectDN.ToString() + " " + e.Message);
 				return null;
 			}
 		}
@@ -123,7 +119,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Crl
 			}
 			else
 			{
-				LOG.Info("CRL number: " + GetCrlNumber(x509crl));
+				//LOG.Info("CRL number: " + GetCrlNumber(x509crl));
 				return true;
 			}
 		}
@@ -138,8 +134,8 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Crl
 			}
 			if (!x509crl.IssuerDN.Equals(issuerCertificate.SubjectDN))
 			{
-				LOG.Warn("The CRL must be signed by the issuer (" + issuerCertificate.SubjectDN
-					+ " ) but instead is signed by " + x509crl.IssuerDN);
+				//LOG.Warn("The CRL must be signed by the issuer (" + issuerCertificate.SubjectDN
+				//	+ " ) but instead is signed by " + x509crl.IssuerDN);
 				return false;
 			}
 			try
@@ -148,32 +144,32 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Crl
 			}
 			catch (Exception e)
 			{
-				LOG.Warn("The signature verification for CRL cannot be performed : " + e.Message
-					);
+				//LOG.Warn("The signature verification for CRL cannot be performed : " + e.Message
+				//	);
 				return false;
 			}
 			DateTime thisUpdate = x509crl.ThisUpdate;
-			LOG.Info("validation date: " + validationDate);
-			LOG.Info("CRL this update: " + thisUpdate);
+			//LOG.Info("validation date: " + validationDate);
+			//LOG.Info("CRL this update: " + thisUpdate);
 			//        if (thisUpdate.after(validationDate)) {
 			//            LOG.warning("CRL too young");
 			//            return false;
 			//        }
-			LOG.Info("CRL next update: " + x509crl.NextUpdate);
+			//LOG.Info("CRL next update: " + x509crl.NextUpdate);
 			if (x509crl.NextUpdate != null && validationDate.CompareTo(x509crl.NextUpdate.Value) > 0) //jbonilla After
 			{
-				LOG.Info("CRL too old");
+				//LOG.Info("CRL too old");
 				return false;
 			}
 			// assert cRLSign KeyUsage bit
 			if (null == issuerCertificate.GetKeyUsage())
 			{
-				LOG.Warn("No KeyUsage extension for CRL issuing certificate");
+				//LOG.Warn("No KeyUsage extension for CRL issuing certificate");
 				return false;
 			}
 			if (false == issuerCertificate.GetKeyUsage()[6])
 			{
-				LOG.Warn("cRLSign bit not set for CRL issuing certificate");
+				//LOG.Warn("cRLSign bit not set for CRL issuing certificate");
 				return false;
 			}
 			return true;

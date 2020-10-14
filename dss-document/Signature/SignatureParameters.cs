@@ -84,7 +84,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature
 
         public SignatureParameters()
         {
-            this.CertificateChain = new AList<X509Certificate>();
+            this.CertificateChain = new List<X509Certificate>();
             this.SignaturePolicy = SignaturePolicy.NO_POLICY;
             this.DigestAlgorithm = DigestAlgorithm.SHA1;
             this.SignatureAlgorithm = SignatureAlgorithm.RSA;
@@ -94,7 +94,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature
 		/// <param name="certificateChain"></param>
 		public virtual void SetCertificateChain(params X509Certificate[] certificateChain)
 		{
-			IList<X509Certificate> list = new AList<X509Certificate>();
+			IList<X509Certificate> list = new List<X509Certificate>();
 			foreach (X509Certificate c in certificateChain)
 			{
 				list.AddItem((X509Certificate)c);

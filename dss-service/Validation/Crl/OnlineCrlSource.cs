@@ -27,7 +27,6 @@ using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.X509;
 using Sharpen;
-using iTextSharp.text.log;
 using Org.BouncyCastle.Security.Certificates;
 
 namespace EU.Europa.EC.Markt.Dss.Validation.Crl
@@ -39,9 +38,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Crl
 	/// 	</version>
 	public class OnlineCrlSource : ICrlSource
 	{
-		private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(OnlineCrlSource).FullName
-			);
-
         /// <summary>Set the HTTPDataLoader to use for query the CRL server</summary>
         /// <param name="urlDataLoader"></param>
         public HTTPDataLoader UrlDataLoader { get; set; }
@@ -59,7 +55,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Crl
 			try
 			{
 				string crlURL = GetCrlUri(certificate);
-				LOG.Info("CRL's URL for " + certificate.SubjectDN + " : " + crlURL);
+				//LOG.Info("CRL's URL for " + certificate.SubjectDN + " : " + crlURL);
 				if (crlURL == null)
 				{
 					return null;
@@ -70,23 +66,23 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Crl
 				}
 				else
 				{
-					LOG.Info("We support only HTTP and HTTPS CRL's url, this url is " + crlURL);
+					//LOG.Info("We support only HTTP and HTTPS CRL's url, this url is " + crlURL);
 					return null;
 				}
 			}
 			catch (CrlException e)
 			{
-				LOG.Error("error parsing CRL: " + e.Message);
+				//LOG.Error("error parsing CRL: " + e.Message);
 				throw new RuntimeException(e);
 			}
 			catch (UriFormatException e)
 			{
-				LOG.Error("error parsing CRL: " + e.Message);
+				//LOG.Error("error parsing CRL: " + e.Message);
 				throw new RuntimeException(e);
 			}
 			catch (CertificateException e)
 			{
-				LOG.Error("error parsing CRL: " + e.Message);
+				//LOG.Error("error parsing CRL: " + e.Message);
 				throw new RuntimeException(e);
 			}
 			/*catch (NoSuchProviderException e)
@@ -121,7 +117,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Crl
 
                     X509CrlParser parser = new X509CrlParser();
                     X509Crl crl = parser.ReadCrl(input);
-					LOG.Info("CRL size: " + crl.GetEncoded().Length + " bytes");
+					//LOG.Info("CRL size: " + crl.GetEncoded().Length + " bytes");
 					return crl;
 				}
 				catch (CannotFetchDataException)
@@ -180,7 +176,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Crl
 				{
 					if (name.TagNo != GeneralName.UniformResourceIdentifier)
 					{
-						LOG.Info("not a uniform resource identifier");
+						//LOG.Info("not a uniform resource identifier");
 						continue;
 					}
 					string str = null;
@@ -202,8 +198,8 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Crl
 					}
 					else
 					{
-						LOG.Info("Supports only http:// and https:// protocol for CRL");
-					}            
+						//LOG.Info("Supports only http:// and https:// protocol for CRL");
+					}
 				}
 			}
 

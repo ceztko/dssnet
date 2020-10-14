@@ -21,7 +21,6 @@
 using EU.Europa.EC.Markt.Dss.Validation;
 using EU.Europa.EC.Markt.Dss.Validation.Certificate;
 using EU.Europa.EC.Markt.Dss.Validation.Xades;
-using iTextSharp.text.log;
 using Microsoft.Xades;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.Ocsp;
@@ -30,6 +29,7 @@ using Org.BouncyCastle.Security;
 using Org.BouncyCastle.X509;
 using Sharpen;
 using System;
+using System.Security.Cryptography;
 using System.Security.Cryptography.Xml;
 using MSXades = Microsoft.Xades;
 
@@ -40,9 +40,6 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Xades
     /// 	</version>
     public class XAdESProfileC : XAdESProfileT
     {
-        private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Signature.Xades.XAdESProfileC
-            ).FullName);
-
         public static readonly string XADES_NAMESPACE = "http://uri.etsi.org/01903/v1.3.2#";
 
         public static readonly string XADES141_NAMESPACE = "http://uri.etsi.org/01903/v1.4.1#";
@@ -82,7 +79,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Xades
                         chainCert.IssuerSerial.X509SerialNumber = x509Cert.SerialNumber.ToString();
                         //TODO jbonilla DigestMethod parameter?
                         chainCert.CertDigest.DigestMethod.Algorithm = SignedXml.XmlDsigSHA1Url;
-                        chainCert.CertDigest.DigestValue = DotNetUtilities.ToX509Certificate2(x509Cert).GetCertHash();
+                        chainCert.CertDigest.DigestValue = new System.Security.Cryptography.X509Certificates.X509Certificate2(x509Cert.GetEncoded()).GetCertHash();
                         //unsignedProperties.UnsignedSignatureProperties.CompleteCertificateRefs.Id = "CompleteCertificateRefsId-" + this.uid;
                         completeCertificateRefs.CertRefs.CertCollection.Add(chainCert);
                     }

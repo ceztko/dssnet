@@ -179,7 +179,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Report
 			{
 				return null;
 			}
-			IList<QualificationElement> elements = new AList<QualificationElement>();
+			IList<QualificationElement> elements = new List<QualificationElement>();
 			foreach (KeyValuePair<string, Condition> e in trustService.GetQualifiersAndConditions
 				().EntrySet())
 			{

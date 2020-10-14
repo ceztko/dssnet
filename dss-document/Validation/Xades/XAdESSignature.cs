@@ -246,7 +246,7 @@
 //        {
 //            NodeList timestampsNodes = this.signatureElement.GetElementsByTagName(elementName
 //                );
-//            IList<TimestampToken> signatureTimestamps = new AList<TimestampToken>();
+//            IList<TimestampToken> signatureTimestamps = new List<TimestampToken>();
 //            for (int i = 0; i < timestampsNodes.GetLength(); i++)
 //            {
 //                TimestampToken tstoken = MakeTimestampToken((Element)timestampsNodes.Item(i), timestampType
@@ -263,7 +263,7 @@
 //        {
 //            try
 //            {
-//                IList<TimestampToken> signatureTimestamps = new AList<TimestampToken>();
+//                IList<TimestampToken> signatureTimestamps = new List<TimestampToken>();
 //                NodeList timestampsNodes = XMLUtils.GetNodeList(signatureElement, "./ds:Object/xades:QualifyingProperties/xades:UnsignedProperties/xades:UnsignedSignatureProperties"
 //                     + "/xades:SignatureTimeStamp");
 //                for (int i = 0; i < timestampsNodes.GetLength(); i++)
@@ -287,7 +287,7 @@
 //        {
 //            try
 //            {
-//                IList<TimestampToken> signatureTimestamps = new AList<TimestampToken>();
+//                IList<TimestampToken> signatureTimestamps = new List<TimestampToken>();
 //                NodeList timestampsNodes = XMLUtils.GetNodeList(signatureElement, "./ds:Object/xades:QualifyingProperties/xades:UnsignedProperties/xades:UnsignedSignatureProperties"
 //                     + "/xades:SigAndRefsTimeStamp");
 //                for (int i = 0; i < timestampsNodes.GetLength(); i++)
@@ -311,7 +311,7 @@
 //        {
 //            try
 //            {
-//                IList<TimestampToken> signatureTimestamps = new AList<TimestampToken>();
+//                IList<TimestampToken> signatureTimestamps = new List<TimestampToken>();
 //                NodeList timestampsNodes = XMLUtils.GetNodeList(signatureElement, "./ds:Object/xades:QualifyingProperties/xades:UnsignedProperties/xades:UnsignedSignatureProperties"
 //                     + "/xades:RefsOnlyTimeStamp");
 //                for (int i = 0; i < timestampsNodes.GetLength(); i++)
@@ -335,7 +335,7 @@
 //        {
 //            try
 //            {
-//                IList<TimestampToken> signatureTimestamps = new AList<TimestampToken>();
+//                IList<TimestampToken> signatureTimestamps = new List<TimestampToken>();
 //                NodeList timestampsNodes = XMLUtils.GetNodeList(signatureElement, "./ds:Object/xades:QualifyingProperties/xades:UnsignedProperties/xades:UnsignedSignatureProperties"
 //                     + "/xades141:ArchiveTimeStamp");
 //                for (int i = 0; i < timestampsNodes.GetLength(); i++)
@@ -416,7 +416,7 @@
 //                {
 //                    return null;
 //                }
-//                IList<AdvancedSignature> xadesList = new AList<AdvancedSignature>();
+//                IList<AdvancedSignature> xadesList = new List<AdvancedSignature>();
 //                for (int i = 0; i < counterSigs.GetLength(); i++)
 //                {
 //                    Element counterSigEl = (Element)counterSigs.Item(i);
@@ -479,7 +479,7 @@
 //                {
 //                    return null;
 //                }
-//                IList<CertificateRef> certIds = new AList<CertificateRef>();
+//                IList<CertificateRef> certIds = new List<CertificateRef>();
 //                NodeList certIdnodes = XMLUtils.GetNodeList(signingCertEl, "./xades:Cert");
 //                for (int i = 0; i < certIdnodes.GetLength(); i++)
 //                {
@@ -541,7 +541,7 @@
 //        {
 //            try
 //            {
-//                IList<CRLRef> certIds = new AList<CRLRef>();
+//                IList<CRLRef> certIds = new List<CRLRef>();
 //                Element signingCertEl = XMLUtils.GetElement(signatureElement, "./ds:Object/xades:QualifyingProperties/xades:UnsignedProperties/xades:UnsignedSignatureProperties"
 //                     + "/xades:CompleteRevocationRefs/xades:CRLRefs");
 //                if (signingCertEl != null)
@@ -574,7 +574,7 @@
 //        {
 //            try
 //            {
-//                IList<OCSPRef> certIds = new AList<OCSPRef>();
+//                IList<OCSPRef> certIds = new List<OCSPRef>();
 //                Element signingCertEl = XMLUtils.GetElement(signatureElement, "./ds:Object/xades:QualifyingProperties/xades:UnsignedProperties/xades:UnsignedSignatureProperties"
 //                     + "/xades:CompleteRevocationRefs/xades:OCSPRefs");
 //                if (signingCertEl != null)
@@ -678,7 +678,7 @@
 //        {
 //            try
 //            {
-//                IList<Node> timeStampNodesXadesX1 = new AList<Node>();
+//                IList<Node> timeStampNodesXadesX1 = new List<Node>();
 //                Element signatureValue = XMLUtils.GetElement(signatureElement, "./ds:SignatureValue"
 //                    );
 //                timeStampNodesXadesX1.AddItem(signatureValue);
@@ -715,7 +715,7 @@
 //        {
 //            try
 //            {
-//                IList<Node> timeStampNodesXadesX1 = new AList<Node>();
+//                IList<Node> timeStampNodesXadesX1 = new List<Node>();
 //                Node completeCertificateRefsNode = XMLUtils.GetElement(signatureElement, "./ds:Object/xades:QualifyingProperties/xades:UnsignedProperties/xades:UnsignedSignatureProperties"
 //                     + "/xades:CompleteCertificateRefs");
 //                if (completeCertificateRefsNode != null)

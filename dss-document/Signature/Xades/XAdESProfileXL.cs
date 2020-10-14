@@ -28,7 +28,6 @@ using EU.Europa.EC.Markt.Dss.Validation.Certificate;
 using EU.Europa.EC.Markt.Dss.Validation.Ocsp;
 using EU.Europa.EC.Markt.Dss.Validation.Xades;
 using Org.BouncyCastle.Ocsp;
-using iTextSharp.text.log;
 using Org.BouncyCastle.X509;
 using Microsoft.Xades;
 using Org.BouncyCastle.Security;
@@ -40,9 +39,6 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Xades
     /// 	</version>
     public class XAdESProfileXL : XAdESProfileX
     {
-        private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Signature.Xades.XAdESProfileXL
-            ).FullName);
-
         /// <summary>The default constructor for XAdESProfileT.</summary>
         /// <remarks>The default constructor for XAdESProfileT.</remarks>
         public XAdESProfileXL()

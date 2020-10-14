@@ -26,7 +26,6 @@ using EU.Europa.EC.Markt.Dss.Validation.Https;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.X509;
 using Sharpen;
-using iTextSharp.text.log;
 using Org.BouncyCastle.X509;
 using Org.BouncyCastle.Security.Certificates;
 using System.Collections;
@@ -38,9 +37,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Certificate
 	/// 	</version>
 	public class AIACertificateSource : CertificateSource
 	{
-		private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Validation.Certificate.AIACertificateSource
-			).FullName);
-
 		private X509Certificate certificate;
 
 		private HTTPDataLoader httpDataLoader;
@@ -57,7 +53,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Certificate
         public virtual IList<CertificateAndContext> GetCertificateBySubjectName(X509Name
 			 subjectName)
 		{
-			IList<CertificateAndContext> list = new AList<CertificateAndContext>();
+			IList<CertificateAndContext> list = new List<CertificateAndContext>();
 			try
 			{
 				string url = GetAccessLocation(certificate, X509ObjectIdentifiers.IdADCAIssuers);
@@ -107,7 +103,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Certificate
 					();
 				foreach (AccessDescription accessDescription in accessDescriptions)
 				{
-					LOG.Info("access method: " + accessDescription.AccessMethod);
+					//LOG.Info("access method: " + accessDescription.AccessMethod);
 					bool correctAccessMethod = accessDescription.AccessMethod.Equals(accessMethod
 						);
 					if (!correctAccessMethod)
@@ -117,12 +113,12 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Certificate
 					GeneralName gn = accessDescription.AccessLocation;
 					if (gn.TagNo != GeneralName.UniformResourceIdentifier)
 					{
-						LOG.Info("not a uniform resource identifier");
+						//LOG.Info("not a uniform resource identifier");
 						continue;
 					}
 					DerIA5String str = (DerIA5String)((DerTaggedObject)gn.ToAsn1Object()).GetObject();
 					string accessLocation = str.GetString();
-					LOG.Info("access location: " + accessLocation);
+					//LOG.Info("access location: " + accessLocation);
 					return accessLocation;
 				}
 				return null;

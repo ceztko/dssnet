@@ -28,7 +28,6 @@ using Org.BouncyCastle.Cms;
 //using Org.BouncyCastle.Jce.Provider;
 //using Org.BouncyCastle.Util;
 using Sharpen;
-using iTextSharp.text.log;
 using Org.BouncyCastle.X509;
 using System.Collections;
 using Org.BouncyCastle.Security.Certificates;
@@ -41,9 +40,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 	/// 	</version>
 	public class CAdESCertificateSource : SignatureCertificateSource
 	{
-		private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Validation.Cades.CAdESCertificateSource
-			).FullName);
-
 		private CmsSignedData cmsSignedData;
 
 		private SignerID signerId;
@@ -79,20 +75,20 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 
 		public override IList<X509Certificate> GetCertificates()
 		{
-			IList<X509Certificate> list = new AList<X509Certificate>();
+			IList<X509Certificate> list = new List<X509Certificate>();
 			try
 			{
 				if (!onlyExtended)
 				{
-					LOG.Info(cmsSignedData.GetCertificates("Collection").GetMatches(null).Count + " certificate in collection"
-						);
+					//LOG.Info(cmsSignedData.GetCertificates("Collection").GetMatches(null).Count + " certificate in collection"
+					//	);
 					//foreach (X509CertificateHolder ch in (ICollection<X509CertificateHolder>)cmsSignedData
                     foreach (X509Certificate ch in cmsSignedData
 						.GetCertificates("Collection").GetMatches(null))
 					{
 						//X509Certificate c = new X509CertificateObject(ch.ToASN1Structure());
                         X509Certificate c = ch;
-						LOG.Info("Certificate for subject " + c.SubjectDN);
+						//LOG.Info("Certificate for subject " + c.SubjectDN);
 						if (!list.Contains(c))
 						{
 							list.AddItem(c);
