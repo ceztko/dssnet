@@ -22,7 +22,6 @@ using System.IO;
 using EU.Europa.EC.Markt.Dss;
 using EU.Europa.EC.Markt.Dss.Validation.Https;
 using Sharpen;
-using iTextSharp.text.log;
 using System.Net;
 using Org.BouncyCastle.Utilities.IO;
 
@@ -37,9 +36,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Https
 	/// 	</version>
 	public class NetHttpDataLoader : HTTPDataLoader
 	{
-		private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Validation.Https.NetHttpDataLoader
-			).FullName);
-		
         public string ContentType { get; set; }
         public string Accept { get; set; }
         public int TimeOut { get; set; }
@@ -54,8 +50,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Https
         {
             try
             {
-                LOG.Info("Fetching data from url " + URL);
-
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(URL);
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
@@ -80,8 +74,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Https
         {
             try
             {
-                LOG.Info("Post data to url " + URL);      
-
                 byte[] data = Streams.ReadAll(content);
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(URL);

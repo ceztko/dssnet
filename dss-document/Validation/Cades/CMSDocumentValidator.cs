@@ -56,7 +56,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 
 		public override IList<AdvancedSignature> GetSignatures()
 		{
-			IList<AdvancedSignature> infos = new AList<AdvancedSignature>();
+			IList<AdvancedSignature> infos = new List<AdvancedSignature>();
 			foreach (object o in this.cmsSignedData.GetSignerInfos().GetSigners())
 			{
 				SignerInformation i = (SignerInformation)o;

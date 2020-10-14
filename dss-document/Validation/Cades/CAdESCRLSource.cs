@@ -79,7 +79,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 
 		public override IList<X509Crl> GetCRLsFromSignature()
 		{
-			IList<X509Crl> list = new AList<X509Crl>();
+			IList<X509Crl> list = new List<X509Crl>();
 			try
 			{
 				// Add certificates contained in SignedData

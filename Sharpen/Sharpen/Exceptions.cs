@@ -28,110 +28,17 @@ using System;
 
 namespace Sharpen
 {
-	public class VirtualMachineError : Error
-	{
-	}
-
-	public class StackOverflowError : VirtualMachineError
-	{
-		public StackOverflowError ()
-		{
-		}
-	}
-
-	public class BrokenBarrierException : Exception
-	{
-	}
-
-	internal class BufferUnderflowException : Exception
-	{
-	}
 
 	public class CharacterCodingException : Exception
 	{
-	}
-
-	public class DataFormatException : Exception
-	{
-	}
-
-	public class EOFException : Exception
-	{
-		public EOFException ()
-		{
-		}
-
-		public EOFException (string msg) : base(msg)
-		{
-		}
-	}
-
-	public class Error : Exception
-	{
-		public Error ()
-		{
-		}
-
-		public Error (Exception ex) : base("Runtime Exception", ex)
-		{
-		}
-
-		public Error (string msg) : base(msg)
-		{
-		}
-
-		public Error (string msg, Exception ex) : base(msg, ex)
-		{
-		}
-	}
-
-	public class ExecutionException : Exception
-	{
-		public ExecutionException (Exception inner): base ("Execution failed", inner)
-		{
-		}
-	}
-
-	public class InstantiationException : Exception
-	{
-	}
-
-	public class InterruptedIOException : Exception
-	{
-		public InterruptedIOException (string msg) : base(msg)
-		{
-		}
 	}
 
 	public class MissingResourceException : Exception
 	{
 	}
 
-    //public class NoSuchAlgorithmException : Exception
-    //{    
-    //}     
-    
 	public class NoSuchElementException : Exception
 	{
-	}
-
-	internal class NoSuchMethodException : Exception
-	{
-	}
-
-	internal class OverlappingFileLockException : Exception
-	{
-	}
-
-	public class ParseException : Exception
-	{
-		public ParseException ()
-		{
-		}
-
-		public ParseException (string msg, int errorOffset) : base(string.Format ("Msg: msg. Error Offset: {1}", msg, errorOffset))
-		{ 
-		}
 	}
 
 	public class RuntimeException : Exception
@@ -153,38 +60,12 @@ namespace Sharpen
 		}
 	}
 
-	internal class StringIndexOutOfBoundsException : Exception
+	public class UnknownHostException : Exception
 	{
-	}
-
-	internal class UnknownHostException : Exception
-	{
-		public UnknownHostException ()
-		{
-		}
 
 		public UnknownHostException (Exception ex): base ("Host not found", ex)
 		{
 		}
-	}
-
-	internal class UnsupportedEncodingException : Exception
-	{
-	}
-
-	internal class URISyntaxException : Exception
-	{
-		public URISyntaxException (string s, string msg) : base(s + " " + msg)
-		{
-		}
-	}
-
-	internal class ZipException : Exception
-	{
-	}
-
-	public class GitException : Exception
-	{
 	}
 	
 	class ConnectException: Exception
@@ -192,10 +73,6 @@ namespace Sharpen
 		public ConnectException (string msg): base (msg)
 		{
 		}
-	}
-	
-	class KeyManagementException: Exception
-	{
 	}
 	
 	class IllegalCharsetNameException: Exception

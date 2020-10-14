@@ -32,7 +32,6 @@ using Org.BouncyCastle.Asn1.X509.Qualified;
 using Org.BouncyCastle.Cms;
 using Org.BouncyCastle.Ocsp;
 using Sharpen;
-using iTextSharp.text.log;
 using Org.BouncyCastle.X509;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Security.Certificates;
@@ -45,9 +44,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 	/// 	</version>
 	public abstract class SignedDocumentValidator
 	{
-		private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(SignedDocumentValidator
-			).FullName);
-
 		private static readonly string SVC_INFO = "http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/";
 
         /// <returns>the document</returns>
@@ -157,7 +153,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 			{
 				return null;
 			}
-			IList<SignatureVerification> counterSigVerifs = new AList<SignatureVerification>(
+			IList<SignatureVerification> counterSigVerifs = new List<SignatureVerification>(
 				);
 			foreach (AdvancedSignature counterSig in counterSignatures)
 			{
@@ -183,7 +179,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 			 signature, DateTime referenceTime, ValidationContext ctx, IList<TimestampToken>
 			 tstokens, byte[] data)
 		{
-			IList<TimestampVerificationResult> tstokenVerifs = new AList<TimestampVerificationResult
+			IList<TimestampVerificationResult> tstokenVerifs = new List<TimestampVerificationResult
 				>();
 			if (tstokens != null)
 			{
@@ -308,15 +304,15 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 				{
 					if (neededCert.GetCertificate().Equals(ctx.GetCertificate()))
 					{
-						LOG.Info("Don't check for the signing certificate");
+						//LOG.Info("Don't check for the signing certificate");
 						continue;
 					}
-					LOG.Info("Looking for the CertificateRef of " + neededCert);
+					//LOG.Info("Looking for the CertificateRef of " + neededCert);
 					bool found = false;
 					foreach (CertificateRef referencedCert in refs)
 					{
-						LOG.Info("Compare to " + referencedCert);						
-                        byte[] hash = DigestUtilities.CalculateDigest
+						//LOG.Info("Compare to " + referencedCert);						
+						byte[] hash = DigestUtilities.CalculateDigest
                             (referencedCert.GetDigestAlgorithm(),
                             neededCert.GetCertificate().GetEncoded());                            
 						if (Arrays.Equals(hash, referencedCert.GetDigestValue()))
@@ -325,7 +321,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 							break;
 						}
 					}
-					LOG.Info("Ref " + (found ? " found" : " not found"));
+					//LOG.Info("Ref " + (found ? " found" : " not found"));
 					if (!found)
 					{
 						return false;
@@ -371,7 +367,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 							);
 					}
 				}
-				LOG.Info("Every CertificateRef found " + everyNeededCertAreInSignature);
+				//LOG.Info("Every CertificateRef found " + everyNeededCertAreInSignature);
 				IList<OCSPRef> ocspRefs = signature.GetOCSPRefs();
 				IList<CRLRef> crlRefs = signature.GetCRLRefs();
 				int refCount = 0;
@@ -550,18 +546,18 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 				{
 					continue;
 				}
-				LOG.Info("Looking for the certificate ref of " + neededCert);
+				//LOG.Info("Looking for the certificate ref of " + neededCert);
 				bool found = false;
 				foreach (X509Certificate referencedCert in certificates)
 				{
-					LOG.Info("Compare to " + referencedCert.SubjectDN);
+					//LOG.Info("Compare to " + referencedCert.SubjectDN);
 					if (referencedCert.Equals(neededCert.GetCertificate()))
 					{
 						found = true;
 						break;
 					}
 				}
-				LOG.Info("Cert " + (found ? " found" : " not found"));
+				//LOG.Info("Cert " + (found ? " found" : " not found"));
 				if (!found)
 				{
 					return false;
@@ -583,7 +579,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 		{
 			foreach (BasicOcspResp ocspResp in ctx.GetNeededOCSPResp())
 			{
-				LOG.Info("Looking for the OcspResp produced at " + ocspResp.ProducedAt);
+				//LOG.Info("Looking for the OcspResp produced at " + ocspResp.ProducedAt);
 				bool found = false;
 				foreach (object valueOrRef in ocspValuesOrRef)
 				{
@@ -606,7 +602,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 						}
 					}
 				}
-				LOG.Info("Ref " + (found ? " found" : " not found"));
+				//LOG.Info("Ref " + (found ? " found" : " not found"));
 				if (!found)
 				{
 					return false;
@@ -628,7 +624,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 		{
 			foreach (X509Crl crl in ctx.GetNeededCRL())
 			{
-				LOG.Info("Looking for CRL ref issued by " + crl.IssuerDN);
+				//LOG.Info("Looking for CRL ref issued by " + crl.IssuerDN);
 				bool found = false;
 				foreach (object valueOrRef in crlValuesOrRef)
 				{
@@ -651,7 +647,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 						}
 					}
 				}
-				LOG.Info("Ref " + (found ? " found" : " not found"));
+				//LOG.Info("Ref " + (found ? " found" : " not found"));
 				if (!found)
 				{
 					return false;
@@ -673,7 +669,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 				IList<X509Certificate> refs = signature.GetCertificates();
 				if (refs.IsEmpty())
 				{
-					LOG.Info("There is no certificate refs in the signature");
+					//LOG.Info("There is no certificate refs in the signature");
 					everyNeededCertAreInSignature.SetStatus(Result.ResultStatus.INVALID, "no.certificate.value"
 						);
 				}
@@ -685,7 +681,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 							);
 					}
 				}
-				LOG.Info("Every certificate found " + everyNeededCertAreInSignature);
+				//LOG.Info("Every certificate found " + everyNeededCertAreInSignature);
 				int valueCount = 0;
 				IList<BasicOcspResp> ocspValues = signature.GetOCSPs();
 				if (ocspValues != null)
@@ -741,7 +737,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 				}
 				catch (IOException e)
 				{
-					LOG.Error("Error verifyind level A " + e.Message);
+					//LOG.Error("Error verifyind level A " + e.Message);
 					levelReached.SetStatus(Result.ResultStatus.UNDETERMINED, "exception.while.verifying"
 						);
 				}
@@ -810,7 +806,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 		{
 			if (signature.GetSigningCertificate() == null)
 			{
-				LOG.Error("There is no signing certificate");
+				//LOG.Error("There is no signing certificate");
 				return null;
 			}
 			QCStatementInformation qcStatementInformation = VerifyQStatement(signature.GetSigningCertificate
@@ -853,7 +849,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 		{
 			DateTime verificationTime = DateTime.Now;
 			TimeInformation timeInformation = new TimeInformation(verificationTime);
-			IList<SignatureInformation> signatureInformationList = new AList<SignatureInformation
+			IList<SignatureInformation> signatureInformationList = new List<SignatureInformation
 				>();
 			foreach (AdvancedSignature signature in GetSignatures())
 			{

@@ -18,7 +18,6 @@
  * "DSS - Digital Signature Services".  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using iTextSharp.text.log;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Security.Certificates;
 using Org.BouncyCastle.X509;
@@ -34,9 +33,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Certificate
     /// 	</version>
     public class KeyStoreCertificateSource : OfflineCertificateSource
     {
-        private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Validation.Certificate.KeyStoreCertificateSource
-            ).FullName);
-
         private FilePath keyStoreFile;
 
         private string password;
@@ -71,7 +67,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Certificate
 
         public override IList<X509Certificate> GetCertificates()
         {
-            IList<X509Certificate> certificates = new AList<X509Certificate>();
+            IList<X509Certificate> certificates = new List<X509Certificate>();
             try
             {
                 throw new System.NotImplementedException();

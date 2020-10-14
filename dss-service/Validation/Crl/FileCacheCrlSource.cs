@@ -4,7 +4,6 @@ using System.IO;
 using EU.Europa.EC.Markt.Dss;
 using EU.Europa.EC.Markt.Dss.Validation.Crl;
 using Sharpen;
-using iTextSharp.text.log;
 using Org.BouncyCastle.X509;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Security.Certificates;
@@ -19,9 +18,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Crl
 	/// 	</version>
 	public class FileCacheCrlSource : ICrlSource
 	{
-		private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Validation.Crl.FileCacheCrlSource
-			).FullName);        
-
 		public OnlineCrlSource CachedSource { get; set; }
 		
 		public FileCacheCrlSource()
@@ -76,7 +72,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Crl
 
                     if (cachedCrl == null)
                     {
-                        LOG.Info("CRL not in cache");
+                        //LOG.Info("CRL not in cache");
                         return FindAndCacheCrlOnline(certificate, issuerCertificate, pathCrl);
                     }
 
@@ -85,32 +81,32 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Crl
 
                     if (x509crl.NextUpdate.Value.CompareTo(DateTime.Now) > 0)
                     {
-                        LOG.Info("CRL in cache");
+                        //LOG.Info("CRL in cache");
                         return x509crl;
                     }
                     else
                     {
-                        LOG.Info("CRL expired");
+                        //LOG.Info("CRL expired");
                         return FindAndCacheCrlOnline(certificate, issuerCertificate, pathCrl);
                     }
                 }
                 catch (NoSuchAlgorithmException)
                 {
-                    LOG.Info("Cannot instantiate digest for algorithm SHA1 !?");
+                    //LOG.Info("Cannot instantiate digest for algorithm SHA1 !?");
                 }
                 catch (CrlException)
                 {
-                    LOG.Info("Cannot serialize CRL");
+                    //LOG.Info("Cannot serialize CRL");
                 }
                 catch (CertificateException)
                 {
-                    LOG.Info("Cannot instanciate X509 Factory");
+                    //LOG.Info("Cannot instanciate X509 Factory");
                 }
                 catch (WebException)
                 {
-                    LOG.Info("Cannot connect to CRL URL");
+                    //LOG.Info("Cannot connect to CRL URL");
                 }
-			}
+            }
 			return null;
 		}
 

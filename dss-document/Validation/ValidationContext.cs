@@ -30,7 +30,6 @@ using EU.Europa.EC.Markt.Dss.Validation.Tsl;
 using EU.Europa.EC.Markt.Dss.Validation.X509;
 using Org.BouncyCastle.Ocsp;
 using Sharpen;
-using iTextSharp.text.log;
 using Org.BouncyCastle.X509;
 using Org.BouncyCastle.Security.Certificates;
 //using Sharpen.Logging;
@@ -49,14 +48,11 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 	/// 	</version>
 	public class ValidationContext
 	{
-		private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Validation.ValidationContext
-			).FullName);
+		private IList<BasicOcspResp> neededOCSPResp = new List<BasicOcspResp>();
 
-		private IList<BasicOcspResp> neededOCSPResp = new AList<BasicOcspResp>();
+		private IList<X509Crl> neededCRL = new List<X509Crl>();
 
-		private IList<X509Crl> neededCRL = new AList<X509Crl>();
-
-		private IList<CertificateAndContext> neededCertificates = new AList<CertificateAndContext
+		private IList<CertificateAndContext> neededCertificates = new List<CertificateAndContext
 			>();
 
 		private X509Certificate certificate;
@@ -82,7 +78,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 		{
 			if (certificate != null)
 			{
-				LOG.Info("New context for " + certificate.SubjectDN);
+				//LOG.Info("New context for " + certificate.SubjectDN);
 				this.certificate = certificate;
 				AddNotYetVerifiedToken(new CertificateToken(new CertificateAndContext(certificate
 					)));
@@ -130,7 +126,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 			{
 				if (e.Value == null)
 				{
-					LOG.Info("=== Get token to validate " + e.Key);
+					//LOG.Info("=== Get token to validate " + e.Key);
 					return e.Key;
 				}
 			}
@@ -157,7 +153,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 			{
 				foreach (CertificateAndContext cert in list)
 				{
-					LOG.Info(cert.ToString());
+					//LOG.Info(cert.ToString());
 					if (validationDate != null)
 					{
 						try
@@ -166,12 +162,12 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 						}
 						catch (CertificateExpiredException)
 						{
-							LOG.Info("Was expired");
+							//LOG.Info("Was expired");
 							continue;
 						}
 						catch (CertificateNotYetValidException)
 						{
-							LOG.Info("Was not yet valid");
+							//LOG.Info("Was not yet valid");
 							continue;
 						}
 						if (cert.GetCertificateSource() == CertificateSourceType.TRUSTED_LIST && cert.GetContext
@@ -181,7 +177,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 							if (info.GetStatusStartingDateAtReferenceTime() != null && validationDate.CompareTo( //jbonilla Before
 								info.GetStatusStartingDateAtReferenceTime()) < 0)
 							{
-								LOG.Info("Was not valid in the TSL");
+								//LOG.Info("Was not valid in the TSL");
 								continue;
 							}
 							else
@@ -189,7 +185,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 								if (info.GetStatusEndingDateAtReferenceTime() != null && validationDate.CompareTo(info //jbonilla After
 									.GetStatusEndingDateAtReferenceTime()) > 0)
 								{
-									LOG.Info("Was not valid in the TSL");
+									//LOG.Info("Was not valid in the TSL");
 									continue;
 								}
 							}
@@ -208,8 +204,8 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 		{
 			if (!revocationInfo.ContainsKey(signedToken))
 			{
-				LOG.Info("New token to validate " + signedToken + " hashCode " + signedToken.GetHashCode
-					());
+				//LOG.Info("New token to validate " + signedToken + " hashCode " + signedToken.GetHashCode
+				//	());
 				revocationInfo.Put(signedToken, null);
 				if (signedToken is CRLToken)
 				{
@@ -246,7 +242,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 			}
 			else
 			{
-				LOG.Info("Token was already in list " + signedToken);
+				//LOG.Info("Token was already in list " + signedToken);
 			}
 		}
 
@@ -301,7 +297,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 				RevocationData data = null;
 				if (issuer == null)
 				{
-					LOG.Warn("Don't found any issuer for token " + signedToken);
+					//LOG.Warn("Don't found any issuer for token " + signedToken);
 					data = new RevocationData(signedToken);
 				}
 				else
@@ -345,7 +341,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 						}
 						else
 						{
-							LOG.Warn("No status for " + signedToken);
+							//LOG.Warn("No status for " + signedToken);
 						}
 					}
 					else
@@ -363,7 +359,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 					}
 				}
 				Validate(signedToken, data);
-				LOG.Info(this.ToString());
+				//LOG.Info(this.ToString());
 				int newSize = revocationInfo.Count;
 				int newVerified = VerifiedTokenCount();
 				if (newSize != previousSize || newVerified != previousVerified)
@@ -413,7 +409,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 		{
 			if (optionalCRLSource != null || optionalOCSPSource != null)
 			{
-				LOG.Info("Verify with offline services");
+				//LOG.Info("Verify with offline services");
 				OCSPAndCRLCertificateVerifier verifier = new OCSPAndCRLCertificateVerifier();
 				verifier.SetCrlSource(optionalCRLSource);
 				verifier.SetOcspSource(optionalOCSPSource);
@@ -424,7 +420,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 					return status;
 				}
 			}
-			LOG.Info("Verify with online services");
+			//LOG.Info("Verify with online services");
 			OCSPAndCRLCertificateVerifier onlineVerifier = new OCSPAndCRLCertificateVerifier(
 				);
 			onlineVerifier.SetCrlSource(crlSource);
@@ -516,7 +512,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 		/// <returns>the list of CRLs related to the certificate</returns>
 		public virtual IList<X509Crl> GetRelatedCRLs(CertificateAndContext cert)
 		{
-			IList<X509Crl> crls = new AList<X509Crl>();
+			IList<X509Crl> crls = new List<X509Crl>();
 			foreach (X509Crl crl in this.neededCRL)
 			{
 				if (ConcernsCertificate(crl, cert))
@@ -540,7 +536,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 		public virtual IList<BasicOcspResp> GetRelatedOCSPResp(CertificateAndContext cert
 			)
 		{
-			IList<BasicOcspResp> ocspresps = new AList<BasicOcspResp>();
+			IList<BasicOcspResp> ocspresps = new List<BasicOcspResp>();
 			foreach (BasicOcspResp ocspresp in this.neededOCSPResp)
 			{
 				if (this.ConcernsCertificate(ocspresp, cert))
@@ -590,12 +586,12 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 				parent = GetIssuerCertificateFromThisContext(parent);
 				if (parent.GetCertificateSource() == CertificateSourceType.TRUSTED_LIST)
 				{
-					LOG.Info("Parent from TrustedList found " + parent);
+					//LOG.Info("Parent from TrustedList found " + parent);
 					return parent;
 				}
 			}
-			LOG.Warn("No issuer in the TrustedList for this certificate. The parent found is "
-				 + parent);
+			//LOG.Warn("No issuer in the TrustedList for this certificate. The parent found is "
+			//	 + parent);
 			return null;
 		}
 
@@ -622,7 +618,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 		public virtual IList<string> GetQualificationStatement()
 		{
 			ServiceInfo info = GetRelevantServiceInfo();
-			LOG.Info("Service Information " + info);
+			//LOG.Info("Service Information " + info);
 			if (info == null)
 			{
 				return null;

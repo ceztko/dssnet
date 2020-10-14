@@ -24,7 +24,6 @@ using EU.Europa.EC.Markt.Dss.Validation.Certificate;
 using EU.Europa.EC.Markt.Dss.Validation.Crl;
 using EU.Europa.EC.Markt.Dss.Validation.Ocsp;
 using Sharpen;
-using iTextSharp.text.log;
 using Org.BouncyCastle.X509;
 using System.Threading;
 //using Sharpen.Logging;
@@ -37,9 +36,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 	/// 	</version>
 	public class TrustedListCertificateVerifier : CertificateVerifier
 	{
-		private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(TrustedListCertificateVerifier
-			).FullName);
-
         /// <summary>Define how the certificate from the Trusted Lists are retrived.</summary>
         /// <remarks>Define how the certificate from the Trusted Lists are retrived.</remarks>
         /// <param name="trustedListCertificatesSource">the trustedListCertificatesSource to set
@@ -75,7 +71,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 			if (previous != null && previous.GetCertificate().Equals(cert) && previous.GetValidationDate
 				().Equals(validationDate))
 			{
-				LOG.Info("We don't need to check twice for the same");
+				//LOG.Info("We don't need to check twice for the same");
 				return previous;
 			}
 			ValidationContext context = new ValidationContext(cert, validationDate);

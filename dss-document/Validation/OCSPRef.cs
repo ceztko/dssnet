@@ -24,7 +24,6 @@ using EU.Europa.EC.Markt.Dss.Validation.Ocsp;
 using Org.BouncyCastle.Asn1.Esf;
 using Org.BouncyCastle.Ocsp;
 using Sharpen;
-using iTextSharp.text.log;
 using Org.BouncyCastle.Utilities.Encoders;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Crypto;
@@ -37,9 +36,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 	/// 	</version>
 	public class OCSPRef
 	{
-		private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Validation.OCSPRef
-			).FullName);
-
 		private string algorithm;
 
 		private byte[] digestValue;
@@ -82,9 +78,9 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 				}
                 digest.BlockUpdate(oscpBytes, 0, oscpBytes.Length);
 				byte[] computedValue = DigestUtilities.DoFinal(digest);
-				LOG.Info("Compare " + Hex.ToHexString(digestValue) + " to computed value " + 
-					Hex.ToHexString(computedValue) + " of BasicOcspResp produced at " + ocspResp
-					.ProducedAt);
+				//LOG.Info("Compare " + Hex.ToHexString(digestValue) + " to computed value " + 
+				//	Hex.ToHexString(computedValue) + " of BasicOcspResp produced at " + ocspResp
+				//	.ProducedAt);
 				return Arrays.Equals(digestValue, computedValue);
 			}
 			catch (NoSuchAlgorithmException ex)

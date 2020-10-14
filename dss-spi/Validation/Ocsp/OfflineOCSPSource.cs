@@ -18,7 +18,6 @@
  * "DSS - Digital Signature Services".  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using iTextSharp.text.log;
 using Org.BouncyCastle.Ocsp;
 using Org.BouncyCastle.X509;
 using System.Collections.Generic;
@@ -31,14 +30,10 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Ocsp
     /// 	</version>
     public abstract class OfflineOCSPSource : IOcspSource
     {
-        private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(OfflineOCSPSource).FullName
-            );
-
         /// <exception cref="System.IO.IOException"></exception>
         public BasicOcspResp GetOcspResponse(X509Certificate certificate, X509Certificate
              issuerCertificate)
         {
-            LOG.Info("find OCSP response");
             try
             {
                 foreach (BasicOcspResp basicOCSPResp in GetOCSPResponsesFromSignature())
@@ -49,7 +44,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Ocsp
                     {
                         if (singleResp.GetCertID().Equals(certId))
                         {
-                            LOG.Info("OCSP response found");
                             return basicOCSPResp;
                         }
                     }
@@ -59,7 +53,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Ocsp
             }
             catch (OcspException e)
             {
-                LOG.Error("OcspException: " + e.Message);
                 return null;
             }
         }

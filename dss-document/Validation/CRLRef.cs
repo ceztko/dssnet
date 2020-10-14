@@ -58,18 +58,11 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 		/// <exception cref="Sharpen.ParseException">Sharpen.ParseException</exception>
 		public CRLRef(CrlValidatedID cmsRef)
 		{
-			try
-			{
-				crlIssuer = cmsRef.CrlIdentifier.CrlIssuer;
-				crlIssuedTime = cmsRef.CrlIdentifier.CrlIssuedTime;
-				crlNumber = cmsRef.CrlIdentifier.CrlNumber;
-				algorithm = cmsRef.CrlHash.HashAlgorithm.ObjectID.Id;
-				digestValue = cmsRef.CrlHash.GetHashValue();
-			}
-			catch (ParseException ex)
-			{
-				throw new RuntimeException(ex);
-			}
+			crlIssuer = cmsRef.CrlIdentifier.CrlIssuer;
+			crlIssuedTime = cmsRef.CrlIdentifier.CrlIssuedTime;
+			crlNumber = cmsRef.CrlIdentifier.CrlNumber;
+			algorithm = cmsRef.CrlHash.HashAlgorithm.ObjectID.Id;
+			digestValue = cmsRef.CrlHash.GetHashValue();
 		}
 
 		/// <param name="crl"></param>

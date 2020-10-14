@@ -67,10 +67,10 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 				, signingDate, optionalCertificateSource, null, null);
 			try
 			{
-				IList<X509CertificateStructure> certificateValues = new AList<X509CertificateStructure
+				IList<X509CertificateStructure> certificateValues = new List<X509CertificateStructure
 					>();
-				AList<CertificateList> crlValues = new AList<CertificateList>();
-				AList<BasicOcspResponse> ocspValues = new AList<BasicOcspResponse>();
+				List<CertificateList> crlValues = new List<CertificateList>();
+				List<BasicOcspResponse> ocspValues = new List<BasicOcspResponse>();
 				foreach (CertificateAndContext c in validationContext.GetNeededCertificates())
 				{
 					if (!c.Equals(signingCertificate))

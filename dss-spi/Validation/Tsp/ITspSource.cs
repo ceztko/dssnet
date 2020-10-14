@@ -18,7 +18,7 @@
  * "DSS - Digital Signature Services".  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using iTextSharp.text.pdf.security;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Tsp;
 
 namespace EU.Europa.EC.Markt.Dss.Validation.Tsp
@@ -33,7 +33,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Tsp
     /// </remarks>
     /// <version>$Revision: 1887 $ - $Date: 2013-04-23 14:56:09 +0200 (mar., 23 avr. 2013) $
     /// 	</version>
-    public interface ITspSource : ITSAClient
+    public interface ITspSource
     {
         /// <summary>Gets a TimeStampResponse relevant to the provided digest</summary>
         /// <param name="algorithm"></param>
@@ -41,5 +41,10 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Tsp
         /// <returns></returns>
         /// <exception cref="System.IO.IOException">System.IO.IOException</exception>
         TimeStampResponse GetTimeStampResponse(DigestAlgorithm algorithm, byte[] digest);
+
+        // Following methods are interfaces of iTextSharp
+        int GetTokenSizeEstimate();
+        IDigest GetMessageDigest();
+        byte[] GetTimeStampToken(byte[] imprint);
     }
 }

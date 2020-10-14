@@ -26,7 +26,6 @@ using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Ocsp;
 using Sharpen;
-using iTextSharp.text.log;
 using Org.BouncyCastle.X509;
 
 namespace EU.Europa.EC.Markt.Dss.Validation.Ocsp
@@ -38,9 +37,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Ocsp
 	/// 	</version>
 	public class OnlineOcspSource : IOcspSource
 	{
-		private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Validation.Ocsp.OnlineOcspSource
-			).FullName);
-
         /// <summary>Set the HTTPDataLoader to use for querying the OCSP server.</summary>
         /// <remarks>Set the HTTPDataLoader to use for querying the OCSP server.</remarks>
         /// <param name="httpDataLoader"></param>
@@ -66,8 +62,8 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Ocsp
 			try
 			{
 				this.OcspUri = GetAccessLocation(certificate, X509ObjectIdentifiers.OcspAccessMethod);
-                LOG.Info("OCSP URI: " + this.OcspUri);
-                if (this.OcspUri == null)
+				//LOG.Info("OCSP URI: " + this.OcspUri);
+				if (this.OcspUri == null)
 				{
 					return null;
 				}
@@ -96,7 +92,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Ocsp
 			}
 			catch (OcspException e)
 			{
-				LOG.Error("OCSP error: " + e.Message);
+				//LOG.Error("OCSP error: " + e.Message);
 				return null;
 			}
 		}
@@ -125,7 +121,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Ocsp
 				();
 			foreach (AccessDescription accessDescription in accessDescriptions)
 			{
-				LOG.Info("access method: " + accessDescription.AccessMethod);
+				//LOG.Info("access method: " + accessDescription.AccessMethod);
 				bool correctAccessMethod = accessDescription.AccessMethod.Equals(accessMethod
 					);
 				if (!correctAccessMethod)
@@ -135,12 +131,12 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Ocsp
 				GeneralName gn = accessDescription.AccessLocation;
 				if (gn.TagNo != GeneralName.UniformResourceIdentifier)
 				{
-					LOG.Info("not a uniform resource identifier");
+					//LOG.Info("not a uniform resource identifier");
 					continue;
 				}
 				DerIA5String str = (DerIA5String)((DerTaggedObject)gn.ToAsn1Object()).GetObject();
 				string accessLocation = str.GetString();
-				LOG.Info("access location: " + accessLocation);
+				//LOG.Info("access location: " + accessLocation);
 				return accessLocation;
 			}
 			return null;

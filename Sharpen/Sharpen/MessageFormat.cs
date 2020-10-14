@@ -5,7 +5,7 @@ namespace Sharpen
 {
     using System;
 
-    internal class MessageFormat
+    public class MessageFormat
     {
         //jbonilla
         //{

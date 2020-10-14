@@ -171,7 +171,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Token
             if (keys != null)
                 return keys;
 
-            IList<IDssPrivateKeyEntry> list = new AList<IDssPrivateKeyEntry>();
+            IList<IDssPrivateKeyEntry> list = new List<IDssPrivateKeyEntry>();
             try
             {
                 Pkcs12Store keyStore = new Pkcs12StoreBuilder().Build();

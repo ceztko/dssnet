@@ -22,7 +22,6 @@ using EU.Europa.EC.Markt.Dss;
 using EU.Europa.EC.Markt.Dss.Signature;
 using EU.Europa.EC.Markt.Dss.Signature.Cades;
 using EU.Europa.EC.Markt.Dss.Validation.Tsp;
-using iTextSharp.text.log;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.Cms;
 using BcCms = Org.BouncyCastle.Asn1.Cms;
@@ -50,9 +49,6 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 	/// 	</version>
 	public class CAdESProfileT : CAdESSignatureExtension
 	{
-		private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(CAdESProfileT).FullName
-			);
-
 		/*internal AlgorithmIdentifier digestAlgorithm = new DefaultDigestAlgorithmIdentifierFinder
 			().Find(new DefaultSignatureAlgorithmIdentifierFinder().Find("SHA1withRSA"));*/
 
@@ -72,7 +68,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 			{
 				throw new ConfigurationException(ConfigurationException.MSG.CONFIGURE_TSP_SERVER);
 			}
-			LOG.Info("Extend signature with id " + si.SignerID);
+			//LOG.Info("Extend signature with id " + si.SignerID);
 			BcCms.AttributeTable unsigned = si.UnsignedAttributes;
 			//IDictionary<DerObjectIdentifier, Attribute> unsignedAttrHash = null;
             IDictionary unsignedAttrHash = null;

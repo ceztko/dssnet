@@ -3,7 +3,7 @@ namespace Sharpen
 	using System;
 	using System.IO;
 
-	internal class ByteArrayOutputStream : OutputStream
+	public class ByteArrayOutputStream : OutputStream
 	{
 		public ByteArrayOutputStream ()
 		{

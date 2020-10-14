@@ -32,11 +32,10 @@ using Org.BouncyCastle.Cms;
 //using Org.BouncyCastle.Jce.Provider;
 using Org.BouncyCastle.Tsp;
 using Sharpen;
-using iTextSharp.text.log;
 using System.Collections;
 using Org.BouncyCastle.Security;
-using iTextSharp.text.pdf.security;
 using Org.BouncyCastle.Crypto;
+using System.Collections.Generic;
 //using Sharpen.Logging;
 
 namespace EU.Europa.EC.Markt.Dss.Signature.Cades
@@ -47,9 +46,6 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 	/// 	</version>
 	public abstract class CAdESSignatureExtension : SignatureExtension
 	{
-		private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(CAdESSignatureExtension
-			).FullName);
-
 		protected internal ITspSource signatureTsa;
 
 		/// <returns>the TSA used for the signature-time-stamp attribute</returns>
@@ -72,7 +68,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 			{
 				CmsSignedData signedData = new CmsSignedData(document.OpenStream());
 				SignerInformationStore signerStore = signedData.GetSignerInfos();
-				AList<SignerInformation> siArray = new AList<SignerInformation>();				
+				List<SignerInformation> siArray = new List<SignerInformation>();				
 
                 foreach (SignerInformation si in signerStore.GetSigners())
                 {                    
@@ -87,13 +83,13 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
                         }
                         else
                         {
-                            LOG.Error("Already extended?");
+                            //LOG.Error("Already extended?");
                             siArray.AddItem(si);
                         }                        
                     }
                     catch (IOException)
                     {
-                        LOG.Error("Exception when extending signature");
+                        //LOG.Error("Exception when extending signature");
                         siArray.AddItem(si);
                     }
                 }
@@ -117,7 +113,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 			{
 				CmsSignedData signedData = new CmsSignedData(document.OpenStream());
 				SignerInformationStore signerStore = signedData.GetSignerInfos();
-				AList<SignerInformation> siArray = new AList<SignerInformation>();
+				List<SignerInformation> siArray = new List<SignerInformation>();
 				//Iterator<object> infos = signerStore.GetSigners().Iterator();
                 IEnumerator infos = signerStore.GetSigners().GetEnumerator();
 				while (infos.MoveNext())
@@ -131,7 +127,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 						}
 						catch (IOException)
 						{
-							LOG.Error("Exception when extending signature");
+							//LOG.Error("Exception when extending signature");
 							siArray.AddItem(si);
 						}
 					}
@@ -162,25 +158,18 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 		/// <exception cref="System.Exception">System.Exception</exception>
 		protected internal virtual BcCms.Attribute GetTimeStampAttribute(DerObjectIdentifier oid
 			, ITspSource tsa, AlgorithmIdentifier digestAlgorithm, byte[] messageImprint)
-		{
+		{	
 			try
 			{
                 //jbonilla Hack para obtener el digest del TSA
                 IDigest digest = null;
                 string algorithmName = null;
-                if (tsa is ITSAClient)
-                {
-                    //TODO jbonilla - ¿AlgorithmIdentifier?
-                    digest = ((ITSAClient)tsa).GetMessageDigest();
-                    algorithmName = digest.AlgorithmName;                    
-                }
-                else
-                {
-                    digest = DigestUtilities.GetDigest(DigestAlgorithm.SHA1.GetName());
-                    algorithmName = DigestAlgorithm.SHA1.GetName();
-                }
-                byte[] toTimeStamp = DigestAlgorithms.Digest(digest, messageImprint);
-
+                digest = DigestUtilities.GetDigest(DigestAlgorithm.SHA1.GetName());
+                algorithmName = DigestAlgorithm.SHA1.GetName();
+				digest.BlockUpdate(messageImprint, 0, messageImprint.Length);
+				byte[] r = new byte[digest.GetDigestSize()];
+				digest.DoFinal(r, 0);
+				byte[] toTimeStamp = r;
                 TimeStampResponse tsresp = tsa.GetTimeStampResponse(DigestAlgorithm.GetByName(algorithmName)
                     , toTimeStamp);
 				TimeStampToken tstoken = tsresp.TimeStampToken;
@@ -209,7 +198,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 			 originalData, SignatureParameters parameters)
 		{
 			SignerInformationStore signerStore = signedData.GetSignerInfos();
-			AList<SignerInformation> siArray = new AList<SignerInformation>();
+			List<SignerInformation> siArray = new List<SignerInformation>();
 			//Iterator<SignerInformation> infos = signerStore.GetSigners().Iterator();
             IEnumerator infos = signerStore.GetSigners().GetEnumerator();
 			while (infos.MoveNext())
@@ -221,7 +210,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 				}
 				catch (IOException)
 				{
-					LOG.Error("Exception when extending signature");
+					//LOG.Error("Exception when extending signature");
 					siArray.AddItem(si);
 				}
 			}

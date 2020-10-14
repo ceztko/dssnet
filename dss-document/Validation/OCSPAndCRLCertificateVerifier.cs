@@ -23,7 +23,6 @@ using EU.Europa.EC.Markt.Dss.Validation;
 using EU.Europa.EC.Markt.Dss.Validation.Crl;
 using EU.Europa.EC.Markt.Dss.Validation.Ocsp;
 using Sharpen;
-using iTextSharp.text.log;
 using Org.BouncyCastle.X509;
 //using Sharpen.Logging;
 
@@ -41,9 +40,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 	/// 	</version>
 	public class OCSPAndCRLCertificateVerifier : CertificateStatusVerifier
 	{
-		private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Validation.OCSPAndCRLCertificateVerifier
-			).FullName);
-
 		private IOcspSource ocspSource;
 
 		private ICrlSource crlSource;
@@ -95,28 +91,28 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 		{
 			CertificateStatusVerifier ocspVerifier = new OCSPCertificateVerifier(GetOcspSource
 				());
-			LOG.Info("OCSP request for " + cert.SubjectDN);
+			//LOG.Info("OCSP request for " + cert.SubjectDN);
 			CertificateStatus result = ocspVerifier.Check(cert, potentialIssuer, validationDate
 				);
 			if (result != null && result.Validity != CertificateValidity.UNKNOWN)
 			{
-				LOG.Info("OCSP validation done, don't need for CRL");
+				//LOG.Info("OCSP validation done, don't need for CRL");
 				return result;
 			}
 			else
 			{
-				LOG.Info("No OCSP check performed, looking for a CRL for " + cert.SubjectDN);
+				//LOG.Info("No OCSP check performed, looking for a CRL for " + cert.SubjectDN);
 				CRLCertificateVerifier crlVerifier = new CRLCertificateVerifier(GetCrlSource());
 				result = crlVerifier.Check(cert, potentialIssuer, validationDate);
 				if (result != null && result.Validity != CertificateValidity.UNKNOWN)
 				{
-					LOG.Info("CRL check has been performed. Valid or not, the verification is done");
+					//LOG.Info("CRL check has been performed. Valid or not, the verification is done");
 					return result;
 				}
 				else
 				{
-					LOG.Info("We had no response from OCSP nor CRL");					
-                    return null;
+					//LOG.Info("We had no response from OCSP nor CRL");					
+					return null;
 				}
 			}
 		}

@@ -41,7 +41,6 @@ using Org.BouncyCastle.Ocsp;
 //using Org.BouncyCastle.Operator;
 using Org.BouncyCastle.Tsp;
 using Sharpen;
-using iTextSharp.text.log;
 using Org.BouncyCastle.X509;
 using EU.Europa.EC.Markt.Dss.Validation.Ocsp;
 using EU.Europa.EC.Markt.Dss.Validation.Crl;
@@ -58,9 +57,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 	public class CAdESSignature : AdvancedSignature
 	{
 		public static readonly DerObjectIdentifier id_aa_ets_archiveTimestampV2 = PkcsObjectIdentifiers.IdAAEtsArchiveTimestampV2;
-
-		private static ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Validation.Cades.CAdESSignature
-			).FullName);
 
 		private CmsSignedData cmsSignedData;
 
@@ -138,11 +134,11 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 
 		public virtual X509Certificate GetSigningCertificate()
 		{
-			LOG.Info("SignerInformation " + signerInformation.SignerID);
+			//LOG.Info("SignerInformation " + signerInformation.SignerID);
 			ICollection<X509Certificate> certs = GetCertificates();
 			foreach (X509Certificate cert in certs)
 			{
-				LOG.Info("Test match for certificate " + cert.SubjectDN.ToString());
+				//LOG.Info("Test match for certificate " + cert.SubjectDN.ToString());
 				if (signerInformation.SignerID.Match(cert))
 				{
 					return cert;
@@ -202,11 +198,11 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
                         return new DateTimeObject(
                             ((BcX509.Time)o).ToDateTime());
 					}
-					LOG.Error("Error when reading signing time. Unrecognized " + o.GetType());
+					//LOG.Error("Error when reading signing time. Unrecognized " + o.GetType());
 				}
 				catch (Exception ex)
 				{
-					LOG.Error("Error when reading signing time " + ex.Message);
+					//LOG.Error("Error when reading signing time " + ex.Message);
 					return null;
 				}
 			}
@@ -267,7 +263,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 				{
 					return null;
 				}
-				IList<TimestampToken> tstokens = new AList<TimestampToken>();
+				IList<TimestampToken> tstokens = new List<TimestampToken>();
 				foreach (Asn1Encodable value in timeStampAttr.AttrValues.ToArray())
 				{
 					try
@@ -377,7 +373,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 
 		public virtual IList<AdvancedSignature> GetCounterSignatures()
 		{
-			IList<AdvancedSignature> counterSigs = new AList<AdvancedSignature>();
+			IList<AdvancedSignature> counterSigs = new List<AdvancedSignature>();
 			foreach (object o in this.signerInformation.GetCounterSignatures().GetSigners())
 			{
 				SignerInformation i = (SignerInformation)o;
@@ -390,7 +386,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 
 		public virtual IList<CertificateRef> GetCertificateRefs()
 		{
-			IList<CertificateRef> list = new AList<CertificateRef>();
+			IList<CertificateRef> list = new List<CertificateRef>();
 			if (signerInformation.UnsignedAttributes != null)
 			{
 				BcCms.Attribute completeCertRefsAttr = signerInformation.UnsignedAttributes[PkcsObjectIdentifiers.IdAAEtsCertificateRefs];
@@ -427,7 +423,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 
 		public virtual IList<CRLRef> GetCRLRefs()
 		{
-			IList<CRLRef> list = new AList<CRLRef>();
+			IList<CRLRef> list = new List<CRLRef>();
 			if (signerInformation.UnsignedAttributes != null)
 			{
 				BcCms.Attribute completeRevocationRefsAttr = signerInformation.UnsignedAttributes
@@ -451,7 +447,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 
 		public virtual IList<OCSPRef> GetOCSPRefs()
 		{
-			IList<OCSPRef> list = new AList<OCSPRef>();
+			IList<OCSPRef> list = new List<OCSPRef>();
 			if (signerInformation.UnsignedAttributes != null)
 			{
                 BcCms.Attribute completeRevocationRefsAttr = signerInformation.UnsignedAttributes
@@ -618,7 +614,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 
         private IList<BcCms.Attribute> GetTimeStampToRemove(int archiveTimeStampToKeep)
 		{
-			IList<BcCms.Attribute> ts = new AList<BcCms.Attribute>();
+			IList<BcCms.Attribute> ts = new List<BcCms.Attribute>();
 			if (signerInformation.UnsignedAttributes != null)
 			{
 				Asn1EncodableVector v = signerInformation.UnsignedAttributes.GetAll(id_aa_ets_archiveTimestampV2

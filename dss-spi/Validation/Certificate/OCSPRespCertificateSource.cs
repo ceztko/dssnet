@@ -18,7 +18,6 @@
  * "DSS - Digital Signature Services".  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using iTextSharp.text.log;
 using Org.BouncyCastle.Ocsp;
 using Org.BouncyCastle.X509;
 using Sharpen;
@@ -32,9 +31,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Certificate
     /// 	</version>
     public class OCSPRespCertificateSource : OfflineCertificateSource
     {
-        private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Validation.Certificate.OCSPRespCertificateSource
-            ).FullName);
-
         private BasicOcspResp ocspResp;
 
         /// <summary>The default constructor for OCSPRespCertificateSource.</summary>
@@ -46,14 +42,12 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Certificate
 
         public override IList<X509Certificate> GetCertificates()
         {
-            IList<X509Certificate> certs = new AList<X509Certificate>();
+            IList<X509Certificate> certs = new List<X509Certificate>();
             try
             {
                 //foreach (X509Certificate c in ocspResp.GetCerts(null))
                 foreach (X509Certificate c in ocspResp.GetCerts())
                 {
-                    LOG.Info(c.SubjectDN + " issued by " + c.IssuerDN
-                         + " serial number " + c.SerialNumber);
                     certs.AddItem(c);
                 }
             }

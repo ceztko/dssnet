@@ -21,7 +21,6 @@
 using System;
 using EU.Europa.EC.Markt.Dss.Validation.Report;
 using Sharpen;
-using iTextSharp.text.log;
 //using Sharpen.Logging;
 
 namespace EU.Europa.EC.Markt.Dss.Validation.Report
@@ -32,8 +31,8 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Report
 	/// 	</version>
 	public class SignatureInformation
 	{
-		private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Validation.Report.SignatureInformation
-			).FullName);
+		//private static readonly ILogger LOG = LoggerFactory.GetLogger(typeof(EU.Europa.EC.Markt.Dss.Validation.Report.SignatureInformation
+		//	).FullName);
 
 		public enum FinalConclusions
 		{
@@ -196,8 +195,8 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Report
 			{
 				certContentCase = 9;
 			}
-			LOG.Info("TLCase : " + (tlContentCase + 1) + " - CertCase : " + (certContentCase 
-				+ 1));
+			//LOG.Info("TLCase : " + (tlContentCase + 1) + " - CertCase : " + (certContentCase 
+			//	+ 1));
 			try
 			{
 				SignatureInformation.FinalConclusions[][] matrix = new SignatureInformation.FinalConclusions

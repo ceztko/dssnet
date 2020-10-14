@@ -28,7 +28,6 @@ using EU.Europa.EC.Markt.Dss.Signature.Token;
 using Sharpen;
 using SystemX509 = System.Security.Cryptography.X509Certificates;
 using Org.BouncyCastle.X509;
-using iTextSharp.text.pdf.security;
 using Org.BouncyCastle.Utilities.IO;
 
 namespace EU.Europa.EC.Markt.Dss.Signature.Token
@@ -82,6 +81,30 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Token
             }
 
             throw new ArgumentException("Only allowed KSX509Certificate2Entry", "keyEntry");
+        }
+    }
+
+    class X509Certificate2Signature
+    {
+        public X509Certificate2Signature(SystemX509.X509Certificate2 cert, string hashAlgorithm)
+        {
+            throw new NotImplementedException();
+        }
+
+        // Following methods were the interface of iTextSharp
+        public byte[] Sign(byte[] message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetHashAlgorithm()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetEncryptionAlgorighmt()
+        {
+            throw new NotImplementedException();
         }
     }
 }

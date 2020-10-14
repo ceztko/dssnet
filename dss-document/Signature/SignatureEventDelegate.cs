@@ -30,7 +30,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature
 	/// 	</version>
 	public class SignatureEventDelegate
 	{
-		private IList<SignatureEventListener> listeners = new AList<SignatureEventListener
+		private IList<SignatureEventListener> listeners = new List<SignatureEventListener
 			>();
 
 		/// <summary>Add a new listener</summary>

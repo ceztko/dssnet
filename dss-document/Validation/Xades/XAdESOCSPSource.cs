@@ -45,7 +45,7 @@
 
 //        public override IList<BasicOcspResp> GetOCSPResponsesFromSignature()
 //        {
-//            IList<BasicOcspResp> list = new AList<BasicOcspResp>();
+//            IList<BasicOcspResp> list = new List<BasicOcspResp>();
 //            try
 //            {
 //                NodeList nodeList = (NodeList)XMLUtils.GetNodeList(signatureElement, "ds:Object/xades:QualifyingProperties/xades:UnsignedProperties/xades:UnsignedSignatureProperties/xades:RevocationValues/xades:OCSPValues/xades:EncapsulatedOCSPValue"

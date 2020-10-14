@@ -3,7 +3,7 @@ namespace Sharpen
 	using System;
 	using System.IO;
 
-	internal class ByteArrayInputStream : InputStream
+	public class ByteArrayInputStream : InputStream
 	{
 		public ByteArrayInputStream (byte[] data)
 		{

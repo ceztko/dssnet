@@ -44,7 +44,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Certificate
         public IList<CertificateAndContext> GetCertificateBySubjectName(X509Name subjectName
             )
         {
-            IList<CertificateAndContext> list = new AList<CertificateAndContext>();
+            IList<CertificateAndContext> list = new List<CertificateAndContext>();
             foreach (X509Certificate cert in GetCertificates())
             {
                 if (subjectName.Equals(cert.SubjectDN))

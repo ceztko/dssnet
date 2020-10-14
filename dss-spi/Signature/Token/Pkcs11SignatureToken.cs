@@ -238,7 +238,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Token
 		/// <exception cref="EU.Europa.EC.Markt.Dss.ConfigurationException"></exception>
 		public override IList<DSSPrivateKeyEntry> GetKeys()
 		{
-			IList<DSSPrivateKeyEntry> list = new AList<DSSPrivateKeyEntry>();
+			IList<DSSPrivateKeyEntry> list = new List<DSSPrivateKeyEntry>();
 			try
 			{
 				KeyStore keyStore = GetKeyStore();

@@ -18,7 +18,7 @@ namespace Sharpen
 	using System.Text;
 	using System.Text.RegularExpressions;
 
-	internal static class Extensions
+	public static class Extensions
 	{
 		private static readonly long EPOCH_TICKS;
 
@@ -67,11 +67,6 @@ namespace Sharpen
 		public static int IndexOf (this StringBuilder sb, string str)
 		{
 			return sb.ToString ().IndexOf (str);
-		}
-
-		public static Iterable<T> AsIterable<T> (this IEnumerable<T> s)
-		{
-			return new EnumerableWrapper<T> (s);
 		}
 
 		public static int BitCount (int val)
@@ -124,21 +119,6 @@ namespace Sharpen
 			} catch (DecoderFallbackException) {
 				throw new CharacterCodingException ();
 			}
-		}
-		
-		public static string Decode (this Encoding e, ByteBuffer buffer)
-		{
-			return e.Decode (buffer.Array (), buffer.ArrayOffset () + buffer.Position (), buffer.Limit () - buffer.Position ());
-		}
-
-		public static ByteBuffer Encode (this Encoding e, CharSequence str)
-		{
-			return ByteBuffer.Wrap (e.GetBytes (str.ToString ()));
-		}
-
-		public static ByteBuffer Encode (this Encoding e, string str)
-		{
-			return ByteBuffer.Wrap (e.GetBytes (str));
 		}
 		
 		static UTF8Encoding UTF8Encoder = new UTF8Encoding (false, true);
@@ -321,16 +301,6 @@ namespace Sharpen
 			return char.IsUpper (c);
 		}
 
-		public static Sharpen.Iterator<T> Iterator<T> (this ICollection<T> col)
-		{
-			return new EnumeratorWrapper<T> (col, col.GetEnumerator ());
-		}
-
-		public static Sharpen.Iterator<T> Iterator<T> (this IEnumerable<T> col)
-		{
-			return new EnumeratorWrapper<T> (col, col.GetEnumerator ());
-		}
-
 		public static T Last<T> (this ICollection<T> col)
 		{
 			IList<T> list = col as IList<T>;
@@ -338,11 +308,6 @@ namespace Sharpen
 				return list[list.Count - 1];
 			}
 			return col.Last<T> ();
-		}
-
-		public static ListIterator<T> ListIterator<T> (this IList<T> col, int n)
-		{
-			return new ListIterator<T> (col, n);
 		}
 
 		public static int LowestOneBit (int val)
@@ -367,16 +332,6 @@ namespace Sharpen
 			TimeSpan offset = TimeSpan.FromMinutes ((double)offsetMinutes);
 			long num = EPOCH_TICKS + (milliSecondsSinceEpoch * 10000);
 			return new DateTimeOffset (num + offset.Ticks, offset);
-		}
-
-		public static CharsetDecoder NewDecoder (this Encoding enc)
-		{
-			return new CharsetDecoder (enc);
-		}
-
-		public static CharsetEncoder NewEncoder (this Encoding enc)
-		{
-			return new CharsetEncoder (enc);
 		}
 
 		public static int NumberOfLeadingZeros (int val)
@@ -698,11 +653,6 @@ namespace Sharpen
 			return string.IsNullOrEmpty (uri.Query) ? null : uri.Query;
 		}
 		
-		public static HttpURLConnection OpenConnection (this Uri uri, Proxy p)
-		{
-			return new HttpsURLConnection (uri, p);
-		}
-		
 		public static Uri ToURI (this Uri uri)
 		{
 			return uri;
@@ -798,16 +748,6 @@ namespace Sharpen
 		{
 			si.FileName = args[0];
 			si.Arguments = string.Join (" ", args.Skip (1).Select (a => "\"" + a + "\"").ToArray ());
-		}
-		
-		public static SystemProcess Start (this ProcessStartInfo si)
-		{
-			si.UseShellExecute = false;
-			si.RedirectStandardInput = true;
-			si.RedirectStandardError = true;
-			si.RedirectStandardOutput = true;
-			si.CreateNoWindow = true;
-			return SystemProcess.Start (si);
 		}
 	}
 }

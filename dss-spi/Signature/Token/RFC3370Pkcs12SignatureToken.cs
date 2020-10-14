@@ -165,7 +165,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Token
         /// <exception cref="Sharpen.KeyStoreException"></exception>
         public override IList<IDssPrivateKeyEntry> GetKeys()
         {
-            IList<IDssPrivateKeyEntry> list = new AList<IDssPrivateKeyEntry>();
+            IList<IDssPrivateKeyEntry> list = new List<IDssPrivateKeyEntry>();
             try
             {
                 //TODO 
