@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\dss-document\dss-document.csproj" />
+    <ProjectReference Include="..\dss-service\dss-service.csproj" />
   </ItemGroup>
 
 </Project>
