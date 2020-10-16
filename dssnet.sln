@@ -18,8 +18,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		DSS3-T1-CookBook-v1.05.doc = DSS3-T1-CookBook-v1.05.doc
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BouncyCastle", "BouncyCastle\BouncyCastle.csproj", "{C5C1869F-1030-4CF1-9E67-5F7A633C5FC9}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{85D56EDB-6D51-4FAC-A730-BC1CA781E251}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -53,10 +51,6 @@ Global
 		{29388317-681F-4C0C-961D-C8E0C6151447}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29388317-681F-4C0C-961D-C8E0C6151447}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29388317-681F-4C0C-961D-C8E0C6151447}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C5C1869F-1030-4CF1-9E67-5F7A633C5FC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C5C1869F-1030-4CF1-9E67-5F7A633C5FC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C5C1869F-1030-4CF1-9E67-5F7A633C5FC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C5C1869F-1030-4CF1-9E67-5F7A633C5FC9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8FE664D3-42DE-4C43-95B1-2611D532047D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8FE664D3-42DE-4C43-95B1-2611D532047D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FE664D3-42DE-4C43-95B1-2611D532047D}.Release|Any CPU.ActiveCfg = Release|Any CPU

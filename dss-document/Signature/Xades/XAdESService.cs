@@ -20,6 +20,7 @@
 
 using EU.Europa.EC.Markt.Dss.Validation;
 using EU.Europa.EC.Markt.Dss.Validation.Tsp;
+using Org.BouncyCastle.Crypto.Signers;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Utilities.IO;
 using System;
@@ -114,17 +115,6 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Xades
         }
 
         /// <exception cref="System.IO.IOException"></exception>
-        public virtual EU.Europa.EC.Markt.Dss.Digest Digest(Document document, SignatureParameters
-             parameters)
-        {
-            Stream input = ToBeSigned(document, parameters);
-            byte[] data = Streams.ReadAll(input);
-            byte[] digestValue = DigestUtilities.CalculateDigest(
-                parameters.DigestAlgorithm.GetName(), data);
-            return new EU.Europa.EC.Markt.Dss.Digest(parameters.DigestAlgorithm, digestValue);
-        }
-
-        /// <exception cref="System.IO.IOException"></exception>
         public virtual Stream ToBeSigned(Document document, SignatureParameters parameters
             )
         {
@@ -157,7 +147,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Xades
         }
 
         /// <exception cref="System.IO.IOException"></exception>
-        public virtual Document ExtendDocument(Document document, Document originalDocument
+        public override Document ExtendDocument(Document document, Document originalDocument
             , SignatureParameters parameters)
         {
             throw new NotImplementedException();
@@ -170,6 +160,11 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Xades
             //{
             //    return document;
             //}
+        }
+
+        protected override Document SignDocumentInternal(Document document, SignatureParameters parameters, DigestSigner signer)
+        {
+            throw new NotImplementedException();
         }
     }
 }

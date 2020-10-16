@@ -56,7 +56,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 	/// 	</version>
 	public class CAdESSignature : AdvancedSignature
 	{
-		public static readonly DerObjectIdentifier id_aa_ets_archiveTimestampV2 = PkcsObjectIdentifiers.IdAAEtsArchiveTimestampV2;
+		public static readonly DerObjectIdentifier id_aa_ets_archiveTimestampV2 = new DerObjectIdentifier(PkcsObjectIdentifiers.IdAA + ".48");
 
 		private CmsSignedData cmsSignedData;
 

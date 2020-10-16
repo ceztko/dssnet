@@ -34,7 +34,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Token
     /// <remarks>Class holding all PKCS#12 file access logic.</remarks>
     /// <version>$Revision: 1887 $ - $Date: 2013-04-23 14:56:09 +0200 (mar., 23 avr. 2013) $
     /// 	</version>
-    public class Pkcs12SignatureToken : AsyncSignatureTokenConnection
+    public class Pkcs12SignatureToken
     {
         private char[] password;
         private FilePath pkcs12File;
@@ -83,8 +83,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Token
         /// <param name="password"></param>
         /// <param name="pkcs12FilePath"></param>
         public Pkcs12SignatureToken(char[] password, string pkcs12FilePath)
-            : this(password
-                , new FilePath(pkcs12FilePath))
+            : this(password, new FilePath(pkcs12FilePath))
         {
         }
 
@@ -97,8 +96,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Token
         /// <param name="password"></param>
         /// <param name="pkcs12FilePath"></param>
         public Pkcs12SignatureToken(string password, FilePath pkcs12File)
-            : this(password
-                .ToCharArray(), pkcs12File)
+            : this(password.ToCharArray(), pkcs12File)
         {
         }
 
@@ -120,117 +118,41 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Token
             this.pkcs12File = pkcs12File;
         }
 
-        public override void Close()
-        {
-        }
-
-        /// <exception cref="Sharpen.NoSuchAlgorithmException"></exception>
-        public override byte[] EncryptDigest(byte[] digestValue, DigestAlgorithm digestAlgo
-            , IDssPrivateKeyEntry keyEntry)
-        {
-            try
-            {
-                DigestInfo digestInfo = new DigestInfo(digestAlgo.GetAlgorithmIdentifier(), digestValue
-                    );
-
-                //Sharpen.Cipher cipher = Sharpen.Cipher.GetInstance(keyEntry.GetSignatureAlgorithm
-                //    ().GetPadding());
-
-                IBufferedCipher cipher = CipherUtilities.GetCipher(keyEntry.GetSignatureAlgorithm
-                    ().GetPadding());
-
-                //cipher.Init(Sharpen.Cipher.ENCRYPT_MODE, ((KSPrivateKeyEntry)keyEntry).GetPrivateKey
-                //    ());
-
-                cipher.Init(true, ((KSPrivateKeyEntry)keyEntry).PrivateKey);
-
-                return cipher.DoFinal(digestInfo.GetDerEncoded());
-            }
-            /*catch (NoSuchPaddingException e)
-            {
-                throw new RuntimeException(e);
-            }*/
-            catch (InvalidKeyException e)
-            {
-                throw new RuntimeException(e);
-            }
-            /*catch (IllegalBlockSizeException e)
-            {
-                throw new RuntimeException(e);
-            }
-            catch (BadPaddingException)
-            {
-                // More likely the password is not good.
-                throw new BadPasswordException(BadPasswordException.MSG.PKCS12_BAD_PASSWORD);
-            }*/
-        }
-
         /// <exception cref="Sharpen.KeyStoreException"></exception>
-        public override IList<IDssPrivateKeyEntry> GetKeys()
+        public IList<IDssPrivateKeyEntry> GetKeys()
         {
             if (keys != null)
                 return keys;
 
             IList<IDssPrivateKeyEntry> list = new List<IDssPrivateKeyEntry>();
-            try
+            Pkcs12Store keyStore = new Pkcs12StoreBuilder().Build();
+            FileInputStream input = new FileInputStream(pkcs12File);
+            keyStore.Load(input, password);
+            input.Close();
+
+            foreach (string alias in keyStore.Aliases)
             {
-                Pkcs12Store keyStore = new Pkcs12StoreBuilder().Build();
-                FileInputStream input = new FileInputStream(pkcs12File);
-                keyStore.Load(input, password);
-                input.Close();
-
-                foreach (string alias in keyStore.Aliases)
+                bool[] keyUsage;
+                if (!(keyStore.IsKeyEntry(alias)
+                    && keyStore.GetKey(alias).Key.IsPrivate
+                    && ((keyUsage = keyStore.GetCertificate(alias).Certificate.GetKeyUsage()) == null
+                    || keyUsage[0])))
                 {
-                    bool[] keyUsage;
-                    if (!(keyStore.IsKeyEntry(alias)
-                        && keyStore.GetKey(alias).Key.IsPrivate
-                        && ((keyUsage = keyStore.GetCertificate(alias).Certificate.GetKeyUsage()) == null
-                        || keyUsage[0])))
-                    {
-                        continue;
-                    }    
+                    continue;
+                }    
 
-                    X509CertificateEntry[] x = keyStore.GetCertificateChain(alias);
-                    X509Certificate[] chain = new X509Certificate[x.Length];
+                X509CertificateEntry[] x = keyStore.GetCertificateChain(alias);
+                X509Certificate[] chain = new X509Certificate[x.Length];
 
-                    for (int k = 0; k < x.Length; ++k)
-                    {
-                        chain[k] = x[k].Certificate;
-                    }
-
-                    AsymmetricKeyParameter privateKey = keyStore.GetKey(alias).Key;
-
-                    list.AddItem(new KSPrivateKeyEntry(chain[0], chain, privateKey));
-                }
-            }
-            catch (IOException iox)
-            {
-                if (iox.Message.Contains("password") || iox.Message.Contains("corrupted"))
+                for (int k = 0; k < x.Length; ++k)
                 {
-                    //"PKCS12 key store MAC invalid - wrong  or corrupted file."
-                    throw new IOException("La contraseña es incorrecta, o el archivo está corrompido.", iox);
+                    chain[k] = x[k].Certificate;
                 }
 
-                throw;
-            }
-            catch (NoSuchAlgorithmException e)
-            {
-                //throw new KeyStoreException("Can't initialize Sun PKCS#12 security " + "provider. Reason: "
-                //     + e.InnerException.Message, e);
-                throw;
-            }
-            catch (CertificateException e)
-            {
-                //throw new KeyStoreException("Can't initialize Sun PKCS#12 security " + "provider. Reason: "
-                //     + e.InnerException.Message, e);
-                throw;
-            }
-            /*catch (UnrecoverableEntryException e)
-            {
-                throw new KeyStoreException("Can't initialize Sun PKCS#12 security " + "provider. Reason: "
-                     + e.InnerException.Message, e);
-            }*/
+                AsymmetricKeyParameter privateKey = keyStore.GetKey(alias).Key;
 
+                list.AddItem(new KSPrivateKeyEntry(chain[0], chain, privateKey));
+            }
             this.keys = list;
 
             return list;

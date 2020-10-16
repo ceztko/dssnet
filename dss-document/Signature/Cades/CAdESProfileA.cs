@@ -42,7 +42,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 	/// 	</version>
 	public class CAdESProfileA : CAdESProfileXL
 	{
-		public static readonly DerObjectIdentifier id_aa_ets_archiveTimestampV2 = PkcsObjectIdentifiers.IdAAEtsArchiveTimestampV2;
+		public static readonly DerObjectIdentifier id_aa_ets_archiveTimestampV2 = new DerObjectIdentifier(PkcsObjectIdentifiers.IdAA + ".48");
 
 		/// <exception cref="System.IO.IOException"></exception>
 		protected internal override SignerInformation ExtendCMSSignature(CmsSignedData cmsSignedData
