@@ -181,23 +181,26 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Token
 
                 foreach (string alias in keyStore.Aliases)
                 {
-                    if (keyStore.IsKeyEntry(alias)
+                    bool[] keyUsage;
+                    if (!(keyStore.IsKeyEntry(alias)
                         && keyStore.GetKey(alias).Key.IsPrivate
-                        && keyStore.GetCertificate(alias).Certificate.GetKeyUsage()[0] //0: DigitalSignature
-                        )
+                        && ((keyUsage = keyStore.GetCertificate(alias).Certificate.GetKeyUsage()) == null
+                        || keyUsage[0])))
                     {
-                        X509CertificateEntry[] x = keyStore.GetCertificateChain(alias);
-                        X509Certificate[] chain = new X509Certificate[x.Length];
+                        continue;
+                    }    
 
-                        for (int k = 0; k < x.Length; ++k)
-                        {
-                            chain[k] = x[k].Certificate;
-                        }
+                    X509CertificateEntry[] x = keyStore.GetCertificateChain(alias);
+                    X509Certificate[] chain = new X509Certificate[x.Length];
 
-                        AsymmetricKeyParameter privateKey = keyStore.GetKey(alias).Key;
-
-                        list.AddItem(new KSPrivateKeyEntry(chain[0], chain, privateKey));
+                    for (int k = 0; k < x.Length; ++k)
+                    {
+                        chain[k] = x[k].Certificate;
                     }
+
+                    AsymmetricKeyParameter privateKey = keyStore.GetKey(alias).Key;
+
+                    list.AddItem(new KSPrivateKeyEntry(chain[0], chain, privateKey));
                 }
             }
             catch (IOException iox)
