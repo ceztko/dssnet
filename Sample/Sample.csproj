@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -8,6 +8,15 @@
   <ItemGroup>
     <ProjectReference Include="..\dss-document\dss-document.csproj" />
     <ProjectReference Include="..\dss-service\dss-service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\test.p12">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\test.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

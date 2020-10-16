@@ -22,12 +22,12 @@ namespace Sample
     {
         static void Main(string[] args)
         {
-            string pathParaFirmar = @"D:\Desktop\test.pdf";
-            string pathParaFirmado = @"D:\Desktop\out.p7m";
-            string pathCertificadoFirma = @"D:\Desktop\test.p12";
+            string pathToSign = Path.Combine("Resources", "test.pdf");
+            string pathCertificate = Path.Combine("Resources", "test.p12");
+            string pathSigned = "test.p7m";
 
-            Document toBeSigned = new FileDocument(pathParaFirmar);
-            AsyncSignatureTokenConnection token = new Pkcs12SignatureToken("test", pathCertificadoFirma);
+            Document toBeSigned = new FileDocument(pathToSign);
+            AsyncSignatureTokenConnection token = new Pkcs12SignatureToken("password", pathCertificate);
             IDssPrivateKeyEntry privateKey = token.GetKeys()[0];
 
             SignatureParameters parameters = new SignatureParameters();
@@ -41,7 +41,7 @@ namespace Sample
 
             parameters.SignatureFormat = EU.Europa.EC.Markt.Dss.Signature.SignatureFormat.CAdES_BES;
 
-            /*
+            /* CERTIFIED TIMESTAMP
             var ocspSource1 = new OnlineOcspSource();
             var crlSource1 = new FileCacheCrlSource();
             var crlOnline1 = new OnlineCrlSource();
@@ -83,6 +83,7 @@ namespace Sample
             service.Verifier = verifier;
             */
 
+            /* DOUBLE-SIGN
             Document contentInCMS = null;
 
             try
@@ -102,7 +103,6 @@ namespace Sample
             }
 
             Stream iStream = service.ToBeSigned(contentInCMS ?? toBeSigned, parameters);
-
             byte[] signatureValue = token.Sign(iStream, parameters.DigestAlgorithm, privateKey);
 
             // We invoke the service to sign the document with the signature value obtained in the previous step.
@@ -113,11 +113,21 @@ namespace Sample
             FileStream fs = new FileStream(pathParaFirmado, FileMode.OpenOrCreate);
             Streams.PipeAll(signedDocument.OpenStream(), fs);
             fs.Close();
+            return;
+            */
+
+            Stream iStream = service.ToBeSigned(toBeSigned, parameters);
+            byte[] signatureValue = token.Sign(iStream, parameters.DigestAlgorithm, privateKey);
+            Document signedDocument = service.SignDocument(toBeSigned, parameters, signatureValue);
+
+            FileStream fs = new FileStream(pathSigned, FileMode.OpenOrCreate);
+            Streams.PipeAll(signedDocument.OpenStream(), fs);
+            fs.Close();
 
             return;
 
             // Already signed document
-            Document document = new FileDocument(pathParaFirmado);
+            Document document = new FileDocument(pathSigned);
 
             SignedDocumentValidator validator;
             validator = SignedDocumentValidator.FromDocument(document);
