@@ -152,7 +152,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 
             ExternalDigestSigner factory = new ExternalDigestSigner(signer, parameters);
             CmsSignedDataGenerator generator = CreateCMSSignedDataGenerator(
-                factory, parameters, GetSigningProfile(parameters), null);
+                factory, parameters, GetSigningProfile(parameters), true, null);
             byte[] toBeSigned = Streams.ReadAll(document.OpenStream());
             CmsProcessableByteArray content = new CmsProcessableByteArray(toBeSigned);
             CmsSignedData data = generator.Generate(content, parameters.SignaturePackaging != SignaturePackaging.DETACHED);
@@ -246,13 +246,25 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 
         private CmsSignedDataGenerator CreateCMSSignedDataGenerator(ISignatureFactory factory,
             SignatureParameters parameters, CAdESProfileBES cadesProfile,
-            CmsSignedData originalSignedData
+            bool includeUnsignedAttributes, CmsSignedData originalSignedData
             )
         {
             try
             {
-                CmsSignedDataGenerator generator = new CmsSignedDataGenerator();
+
+                CmsAttributeTableGenerator signedAttrGen = new DefaultSignedAttributeTableGenerator(
+                    new AttributeTable(cadesProfile.GetSignedAttributes(parameters)));
+
+                CmsAttributeTableGenerator unsignedAttrGen = new SimpleAttributeTableGenerator(
+                    includeUnsignedAttributes
+                    ? new AttributeTable(cadesProfile.GetUnsignedAttributes(parameters))
+                    : null);
+
                 SignerInfoGeneratorBuilder sigInfoGeneratorBuilder = new SignerInfoGeneratorBuilder();
+                sigInfoGeneratorBuilder.WithSignedAttributeGenerator(signedAttrGen);
+                sigInfoGeneratorBuilder.WithUnsignedAttributeGenerator(unsignedAttrGen);
+
+                CmsSignedDataGenerator generator = new CmsSignedDataGenerator();
                 generator.AddSignerInfoGenerator(sigInfoGeneratorBuilder.Build(factory, parameters.SigningCertificate));
 
                 if (originalSignedData != null)
