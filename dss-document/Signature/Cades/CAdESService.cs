@@ -39,6 +39,7 @@ using Org.BouncyCastle.X509.Store;
 using Sharpen;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 //using Sharpen.Logging;
 
@@ -154,7 +155,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
             CmsSignedDataGenerator generator = CreateCMSSignedDataGenerator(
                 factory, parameters, GetSigningProfile(parameters), true, null);
             byte[] toBeSigned = Streams.ReadAll(document.OpenStream());
-            CmsProcessableByteArray content = new CmsProcessableByteArray(toBeSigned);
+            var content = new CmsProcessableByteArray(toBeSigned);
             CmsSignedData data = generator.Generate(content, parameters.SignaturePackaging != SignaturePackaging.DETACHED);
             Document signedDocument = new CMSSignedDocument(data);
             CAdESSignatureExtension extension = GetExtensionProfile(parameters);
@@ -249,58 +250,41 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
             bool includeUnsignedAttributes, CmsSignedData originalSignedData
             )
         {
-            try
+            CmsAttributeTableGenerator signedAttrGen = new DefaultSignedAttributeTableGenerator(
+                new AttributeTable(cadesProfile.GetSignedAttributes(parameters)));
+
+            CmsAttributeTableGenerator unsignedAttrGen = new SimpleAttributeTableGenerator(
+                includeUnsignedAttributes
+                ? new AttributeTable(cadesProfile.GetUnsignedAttributes(parameters))
+                : null);
+
+            SignerInfoGeneratorBuilder sigInfoGeneratorBuilder = new SignerInfoGeneratorBuilder();
+            sigInfoGeneratorBuilder.WithSignedAttributeGenerator(signedAttrGen);
+            sigInfoGeneratorBuilder.WithUnsignedAttributeGenerator(unsignedAttrGen);
+
+            CmsSignedDataGenerator generator = new CmsSignedDataGenerator();
+            generator.AddSignerInfoGenerator(sigInfoGeneratorBuilder.Build(factory, parameters.SigningCertificate));
+
+            if (originalSignedData != null)
+                generator.AddSigners(originalSignedData.GetSignerInfos());
+
+            var certs = new List<X509Certificate>();
+            certs.Add(parameters.SigningCertificate);
+            if (parameters.CertificateChain != null)
             {
-
-                CmsAttributeTableGenerator signedAttrGen = new DefaultSignedAttributeTableGenerator(
-                    new AttributeTable(cadesProfile.GetSignedAttributes(parameters)));
-
-                CmsAttributeTableGenerator unsignedAttrGen = new SimpleAttributeTableGenerator(
-                    includeUnsignedAttributes
-                    ? new AttributeTable(cadesProfile.GetUnsignedAttributes(parameters))
-                    : null);
-
-                SignerInfoGeneratorBuilder sigInfoGeneratorBuilder = new SignerInfoGeneratorBuilder();
-                sigInfoGeneratorBuilder.WithSignedAttributeGenerator(signedAttrGen);
-                sigInfoGeneratorBuilder.WithUnsignedAttributeGenerator(unsignedAttrGen);
-
-                CmsSignedDataGenerator generator = new CmsSignedDataGenerator();
-                generator.AddSignerInfoGenerator(sigInfoGeneratorBuilder.Build(factory, parameters.SigningCertificate));
-
-                if (originalSignedData != null)
-                    generator.AddSigners(originalSignedData.GetSignerInfos());
-
-                IList certs = new ArrayList();
-                certs.Add(parameters.SigningCertificate);
-                if (parameters.CertificateChain != null)
+                foreach (X509Certificate cert in parameters.CertificateChain)
                 {
-                    foreach (X509Certificate c in parameters.CertificateChain)
-                    {
-                        if (!c.SubjectDN.Equals(parameters.SigningCertificate.SubjectDN))
-                            certs.Add(c);
-                    }
+                    if (!cert.SubjectDN.Equals(parameters.SigningCertificate.SubjectDN))
+                        certs.Add(cert);
                 }
-                IX509Store certStore = X509StoreFactory.Create("Certificate/Collection",
-                    new X509CollectionStoreParameters(certs));
-                generator.AddCertificates(certStore);
-                if (originalSignedData != null)
-                {
-                    generator.AddCertificates(originalSignedData.GetCertificates("Collection"));
-                }
-                return generator;
             }
-            catch (CmsException e)
-            {
-                throw new IOException("CmsException", e);
-            }
-            catch (CertificateEncodingException e)
-            {
-                throw new IOException("CertificateEncodingException", e);
-            }
-            /*catch (OperatorCreationException e)
-			{
-				throw new IOException(e);
-			}*/
+            IX509Store certStore = X509StoreFactory.Create("Certificate/Collection",
+                new X509CollectionStoreParameters(certs));
+            generator.AddCertificates(certStore);
+            if (originalSignedData != null)
+                generator.AddCertificates(originalSignedData.GetCertificates("Collection"));
+
+            return generator;
         }
     }
 }
