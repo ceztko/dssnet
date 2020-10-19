@@ -26,6 +26,7 @@ using Org.BouncyCastle.Asn1.Cms;
 //using Org.BouncyCastle.Cert.Jcajce;
 using Org.BouncyCastle.Cms;
 using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Operators;
 using Org.BouncyCastle.Crypto.Signers;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Security.Certificates;
@@ -38,6 +39,7 @@ using Org.BouncyCastle.X509.Store;
 using Sharpen;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 //using Sharpen.Logging;
 
@@ -138,115 +140,31 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
             throw new ArgumentException("Unsupported signature format " + parameters.SignatureFormat);
         }
 
-        /// <exception cref="System.IO.IOException"></exception>
-        public virtual EU.Europa.EC.Markt.Dss.Digest Digest(Document document, SignatureParameters
-             parameters)
-        {
-            byte[] digestValue = null;
-            try
-            {
-                digestValue = DigestUtilities.CalculateDigest
-                    (parameters.DigestAlgorithm.GetName(),
-                    Streams.ReadAll(ToBeSigned(document, parameters)));
-                return new EU.Europa.EC.Markt.Dss.Digest(parameters.DigestAlgorithm, digestValue
-                    );
-            }
-            catch (NoSuchAlgorithmException e)
-            {
-                throw new RuntimeException(e);
-            }
-        }
-
-        /// <exception cref="System.IO.IOException"></exception>
-        public virtual Stream ToBeSigned(Document document, SignatureParameters parameters
-            )
-        {
-            if (parameters.SignaturePackaging != SignaturePackaging.ENVELOPING && parameters
-                .SignaturePackaging != SignaturePackaging.DETACHED)
-            {
-                throw new ArgumentException("Unsupported signature packaging " + parameters.SignaturePackaging);
-            }
-            //jbonilla - No aplica para C#
-            //SignatureInterceptorProvider provider = new SignatureInterceptorProvider();
-            //Security.AddProvider(provider);
-            //string jsAlgorithm = parameters.GetSignatureAlgorithm().GetJavaSignatureAlgorithm
-            //    (parameters.GetDigestAlgorithm());
-            //PreComputedContentSigner contentSigner = new PreComputedContentSigner(jsAlgorithm
-            //    );
-            PreComputedSigner signer = new PreComputedSigner();
-            //CmsSignedDataGenerator generator = CreateCMSSignedDataGenerator(contentSigner, digestCalculatorProvider
-            //    , parameters, GetSigningProfile(parameters), false, null);
-            CmsSignedDataGenerator generator = CreateCMSSignedDataGenerator
-                (signer, parameters, GetSigningProfile(parameters), false, null);
-
-            byte[] toBeSigned = Streams.ReadAll(document.OpenStream());
-            CmsProcessableByteArray content = new CmsProcessableByteArray(toBeSigned);
-            try
-            {
-                bool includeContent = true;
-                if (parameters.SignaturePackaging == SignaturePackaging.DETACHED)
-                {
-                    includeContent = false;
-                }
-                CmsSignedData signed = generator.Generate(content, includeContent);
-
-                //jbonilla - El ISigner devuelve el mismo hash sin firmar para permitir
-                //la generación de la firma por un medio externo, como un token.
-                /*return new ByteArrayInputStream(contentSigner.GetByteOutputStream().ToByteArray());*/
-                return new MemoryStream(signer.CurrentSignature());
-            }
-            catch (CmsException e)
-            {
-                throw new IOException("CmsException", e);
-            }
-        }
-
         /// <summary><inheritDoc></inheritDoc></summary>
         /// <exception cref="System.IO.IOException"></exception>
-        public virtual Document SignDocument(Document document, SignatureParameters parameters
-            , byte[] signatureValue)
+        protected override Document SignDocumentInternal(Document document, SignatureParameters parameters,
+            DigestSigner signer)
         {
-            if (parameters.SignaturePackaging != SignaturePackaging.ENVELOPING && parameters
-                .SignaturePackaging != SignaturePackaging.DETACHED)
+            if (parameters.SignaturePackaging != SignaturePackaging.ENVELOPING &&
+                parameters.SignaturePackaging != SignaturePackaging.DETACHED)
             {
                 throw new ArgumentException("Unsupported signature packaging " + parameters.SignaturePackaging);
             }
-            try
-            {
-                //jbonilla - No aplica para C#
-                //string jsAlgorithm = parameters.GetSignatureAlgorithm().GetJavaSignatureAlgorithm
-                //    (parameters.GetDigestAlgorithm());
-                //PreComputedContentSigner cs = new PreComputedContentSigner(jsAlgorithm, signatureValue
-                //    );
-                PreComputedSigner s = new PreComputedSigner(signatureValue);
 
-                //DigestCalculatorProvider digestCalculatorProvider = new BcDigestCalculatorProvider
-                //    ();
-                //CMSSignedDataGenerator generator = CreateCMSSignedDataGenerator(cs, digestCalculatorProvider
-                //    , parameters, GetSigningProfile(parameters), true, null);
-                CmsSignedDataGenerator generator = CreateCMSSignedDataGenerator(s, parameters
-                    , GetSigningProfile(parameters), true, null);
-                byte[] toBeSigned = Streams.ReadAll(document.OpenStream());
-                CmsProcessableByteArray content = new CmsProcessableByteArray(toBeSigned);
-                bool includeContent = true;
-                if (parameters.SignaturePackaging == SignaturePackaging.DETACHED)
-                {
-                    includeContent = false;
-                }
-                CmsSignedData data = generator.Generate(content, includeContent);
-                Document signedDocument = new CMSSignedDocument(data);
-                CAdESSignatureExtension extension = GetExtensionProfile(parameters);
-                if (extension != null)
-                {
-                    signedDocument = extension.ExtendSignatures(new CMSSignedDocument(data), document
-                        , parameters);
-                }
-                return signedDocument;
-            }
-            catch (CmsException e)
+            ExternalDigestSigner factory = new ExternalDigestSigner(signer, parameters);
+            CmsSignedDataGenerator generator = CreateCMSSignedDataGenerator(
+                factory, parameters, GetSigningProfile(parameters), true, null);
+            byte[] toBeSigned = Streams.ReadAll(document.OpenStream());
+            var content = new CmsProcessableByteArray(toBeSigned);
+            CmsSignedData data = generator.Generate(content, parameters.SignaturePackaging != SignaturePackaging.DETACHED);
+            Document signedDocument = new CMSSignedDocument(data);
+            CAdESSignatureExtension extension = GetExtensionProfile(parameters);
+            if (extension != null)
             {
-                throw new RuntimeException(e);
+                signedDocument = extension.ExtendSignatures(
+                    new CMSSignedDocument(data), document, parameters);
             }
+            return signedDocument;
         }
 
         /// <summary>Add a signature to the already CMS signed data document.</summary>
@@ -256,9 +174,11 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
         /// <param name="signatureValue"></param>
         /// <returns></returns>
         /// <exception cref="System.IO.IOException">System.IO.IOException</exception>
-        public virtual Document AddASignatureToDocument(Document _signedDocument, SignatureParameters
+        public Document AddASignatureToDocument(Document _signedDocument, SignatureParameters
              parameters, byte[] signatureValue)
         {
+            return null;
+            /*
             if (parameters.SignaturePackaging != SignaturePackaging.ENVELOPING)
             {
                 throw new ArgumentException("Unsupported signature packaging " + parameters.SignaturePackaging);
@@ -276,13 +196,13 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
                 //    (parameters.GetDigestAlgorithm());
                 //PreComputedContentSigner cs = new PreComputedContentSigner(jsAlgorithm, signatureValue
                 //    );
-                PreComputedSigner s = new PreComputedSigner(signatureValue);
+                ExternalSignatureFactory s = new ExternalSignatureFactory(signatureValue);
                 //DigestCalculatorProvider digestCalculatorProvider = new BcDigestCalculatorProvider
                 //    ();
                 //CMSSignedDataGenerator generator = CreateCMSSignedDataGenerator(cs, digestCalculatorProvider
                 //    , parameters, GetSigningProfile(parameters), true, originalSignedData);
-                CmsSignedDataGenerator generator = CreateCMSSignedDataGenerator(s, parameters
-                    , GetSigningProfile(parameters), true, originalSignedData);
+                CmsSignedDataGenerator generator = CreateCMSSignedDataGenerator(
+                    s, parameters, GetSigningProfile(parameters), true, originalSignedData);
 
                 //if (originalSignedData == null || originalSignedData.SignedContent.GetContent
                 //    () == null)                
@@ -306,10 +226,11 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
             {
                 throw new RuntimeException(e);
             }
+            */
         }
 
         /// <exception cref="System.IO.IOException"></exception>
-        public virtual Document ExtendDocument(Document document, Document originalDocument
+        public override Document ExtendDocument(Document document, Document originalDocument
             , SignatureParameters parameters)
         {
             CAdESSignatureExtension extension = GetExtensionProfile(parameters);
@@ -324,87 +245,46 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
             return document;
         }
 
-        /// <exception cref="System.IO.IOException"></exception>
-        //private CmsSignedDataGenerator CreateCMSSignedDataGenerator(ContentSigner contentSigner
-        //    , DigestCalculatorProvider digestCalculatorProvider, SignatureParameters parameters
-        //    , CAdESProfileBES cadesProfile, bool includeUnsignedAttributes, CmsSignedData originalSignedData
-        //    )
-        private CmsSignedDataGenerator CreateCMSSignedDataGenerator(ISigner signer
-            , SignatureParameters parameters, CAdESProfileBES cadesProfile
-            , bool includeUnsignedAttributes, CmsSignedData originalSignedData
+        private CmsSignedDataGenerator CreateCMSSignedDataGenerator(ISignatureFactory factory,
+            SignatureParameters parameters, CAdESProfileBES cadesProfile,
+            bool includeUnsignedAttributes, CmsSignedData originalSignedData
             )
         {
-            try
+            CmsAttributeTableGenerator signedAttrGen = new DefaultSignedAttributeTableGenerator(
+                new AttributeTable(cadesProfile.GetSignedAttributes(parameters)));
+
+            CmsAttributeTableGenerator unsignedAttrGen = new SimpleAttributeTableGenerator(
+                includeUnsignedAttributes
+                ? new AttributeTable(cadesProfile.GetUnsignedAttributes(parameters))
+                : null);
+
+            SignerInfoGeneratorBuilder sigInfoGeneratorBuilder = new SignerInfoGeneratorBuilder();
+            sigInfoGeneratorBuilder.WithSignedAttributeGenerator(signedAttrGen);
+            sigInfoGeneratorBuilder.WithUnsignedAttributeGenerator(unsignedAttrGen);
+
+            CmsSignedDataGenerator generator = new CmsSignedDataGenerator();
+            generator.AddSignerInfoGenerator(sigInfoGeneratorBuilder.Build(factory, parameters.SigningCertificate));
+
+            if (originalSignedData != null)
+                generator.AddSigners(originalSignedData.GetSignerInfos());
+
+            var certs = new List<X509Certificate>();
+            certs.Add(parameters.SigningCertificate);
+            if (parameters.CertificateChain != null)
             {
-                CmsSignedDataGenerator generator = new CmsSignedDataGenerator();
-                X509Certificate signerCertificate = parameters.SigningCertificate;
-
-                //X509CertificateHolder certHolder = new X509CertificateHolder(signerCertificate.GetEncoded());
-                ArrayList certList = new ArrayList();
-                certList.Add(signerCertificate);
-                IX509Store certHolder = X509StoreFactory.Create("CERTIFICATE/COLLECTION",
-                    new X509CollectionStoreParameters(certList));
-
-                //jbonilla - El provider siempre es BC C#
-                //SignerInfoGeneratorBuilder sigInfoGeneratorBuilder = new SignerInfoGeneratorBuilder
-                //    (digestCalculatorProvider);
-
-                CmsAttributeTableGenerator signedAttrGen = new DefaultSignedAttributeTableGenerator
-                    (new AttributeTable(cadesProfile.GetSignedAttributes(parameters)));
-
-                CmsAttributeTableGenerator unsignedAttrGen = new SimpleAttributeTableGenerator
-                    ((includeUnsignedAttributes) ? new AttributeTable(cadesProfile.GetUnsignedAttributes
-                    (parameters)) : null);
-
-                //jbonilla - No existe ContentSigner en BC C#
-                //SignerInfoGenerator sigInfoGen = sigInfoGeneratorBuilder.Build(contentSigner, certHolder);                
-
-                //generator.AddSignerInfoGenerator(sigInfoGen);
-                generator.SignerProvider = signer;
-                generator.AddSigner(new NullPrivateKey(), signerCertificate, parameters.SignatureAlgorithm.GetOid()
-                    , parameters.DigestAlgorithm.GetOid(), signedAttrGen, unsignedAttrGen);
-
-                if (originalSignedData != null)
+                foreach (X509Certificate cert in parameters.CertificateChain)
                 {
-                    generator.AddSigners(originalSignedData.GetSignerInfos());
+                    if (!cert.SubjectDN.Equals(parameters.SigningCertificate.SubjectDN))
+                        certs.Add(cert);
                 }
-                //ICollection<X509Certificate> certs = new List<X509Certificate>();
-                IList certs = new ArrayList();
-                //certs.AddItem(parameters.SigningCertificate);
-                certs.Add(parameters.SigningCertificate);
-                if (parameters.CertificateChain != null)
-                {
-                    foreach (X509Certificate c in parameters.CertificateChain)
-                    {
-                        if (!c.SubjectDN.Equals(parameters.SigningCertificate.SubjectDN))
-                        {
-                            //certs.AddItem(c);
-                            certs.Add(c);
-                        }
-                    }
-                }
-                //JcaCertStore certStore = new JcaCertStore(certs);
-                IX509Store certStore = X509StoreFactory.Create("Certificate/Collection",
-                    new X509CollectionStoreParameters(certs));
-                generator.AddCertificates(certStore);
-                if (originalSignedData != null)
-                {
-                    generator.AddCertificates(originalSignedData.GetCertificates("Collection"));
-                }
-                return generator;
             }
-            catch (CmsException e)
-            {
-                throw new IOException("CmsException", e);
-            }
-            catch (CertificateEncodingException e)
-            {
-                throw new IOException("CertificateEncodingException", e);
-            }
-            /*catch (OperatorCreationException e)
-			{
-				throw new IOException(e);
-			}*/
+            IX509Store certStore = X509StoreFactory.Create("Certificate/Collection",
+                new X509CollectionStoreParameters(certs));
+            generator.AddCertificates(certStore);
+            if (originalSignedData != null)
+                generator.AddCertificates(originalSignedData.GetCertificates("Collection"));
+
+            return generator;
         }
     }
 }

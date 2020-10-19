@@ -18,57 +18,27 @@
  * "DSS - Digital Signature Services".  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.IO;
-using EU.Europa.EC.Markt.Dss.Signature;
-using Sharpen;
+using EU.Europa.EC.Markt.Dss.Signature.Token;
+using Org.BouncyCastle.Crypto.Signers;
 
 namespace EU.Europa.EC.Markt.Dss.Signature
 {
-	/// <summary>Interface for DocumentSignatureService.</summary>
-	/// <remarks>Interface for DocumentSignatureService. Provides operations for sign/verify a document.
-	/// 	</remarks>
-	/// <version>$Revision: 1887 $ - $Date: 2013-04-23 14:56:09 +0200 (mar., 23 avr. 2013) $
-	/// 	</version>
-	public interface DocumentSignatureService
+	public abstract class DocumentSignatureService
 	{
-		/// <summary>Digest content of the Document.</summary>
-		/// <remarks>Digest content of the Document.</remarks>
-		/// <param name="document"></param>
-		/// <param name="parameters"></param>
-		/// <returns></returns>
-		/// <exception cref="System.IO.IOException">System.IO.IOException</exception>
-		/// <Deprecated>Should use the SignatureTokenConnection ability to digest instead.</Deprecated>
-		EU.Europa.EC.Markt.Dss.Digest Digest(Document document, SignatureParameters parameters
-			);
+		public Document SignDocument(Document document, SignatureParameters parameters, IDssPrivateKeyEntry privateKey)
+		{
+			return SignDocumentInternal(document, parameters, (bytes) =>
+			   DigestEncrypt.Encrypt(bytes, parameters.DigestAlgorithm, privateKey));
+		}
 
-		/// <summary>Retrieve the stream of data that need to be signed.</summary>
-		/// <remarks>Retrieve the stream of data that need to be signed.</remarks>
-		/// <param name="document"></param>
-		/// <param name="parameters"></param>
-		/// <returns></returns>
-		/// <exception cref="System.IO.IOException">System.IO.IOException</exception>
-		Stream ToBeSigned(Document document, SignatureParameters parameters);
+		public Document SignDocument(Document document, SignatureParameters parameters, DigestSigner signer)
+        {
+			return SignDocumentInternal(document, parameters, signer);
+		}
 
-		/// <summary>Sign the document with the provided signatureValue.</summary>
-		/// <remarks>Sign the document with the provided signatureValue.</remarks>
-		/// <param name="document"></param>
-		/// <param name="parameters"></param>
-		/// <param name="signatureValue"></param>
-		/// <returns></returns>
-		/// <exception cref="System.IO.IOException">System.IO.IOException</exception>
-		Document SignDocument(Document document, SignatureParameters parameters, byte[] signatureValue
-			);
-
-		/// <summary>Extend the level of the signatures in the document</summary>
-		/// <param name="document"></param>
-		/// <param name="originalDocument">
-		/// In case of extending a detached signature up to level -A, the original document is
-		/// needed.
-		/// </param>
-		/// <param name="parameters"></param>
-		/// <returns></returns>
-		/// <exception cref="System.IO.IOException">System.IO.IOException</exception>
-		Document ExtendDocument(Document document, Document originalDocument, SignatureParameters
+		public abstract Document ExtendDocument(Document document, Document originalDocument, SignatureParameters
 			 parameters);
+
+		protected abstract Document SignDocumentInternal(Document document, SignatureParameters parameters, DigestSigner signer);
 	}
 }

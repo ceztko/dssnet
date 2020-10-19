@@ -64,17 +64,14 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Token
             {
                 return SignatureAlgorithm.RSA;
             }
+            else if (PrivateKey is DsaKeyParameters)
+            {
+                return SignatureAlgorithm.DSA;
+            }
             else
             {
-                if (PrivateKey is DsaKeyParameters)
-                {
-                    return SignatureAlgorithm.DSA;
-                }
-                else
-                {
-                    throw new NoSuchAlgorithmException("Don't find algorithm for PrivateKey of type "
-                        + PrivateKey.GetType());
-                }
+                throw new NoSuchAlgorithmException("Don't find algorithm for PrivateKey of type "
+                    + PrivateKey.GetType());
             }
         }
     }

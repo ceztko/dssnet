@@ -27,7 +27,7 @@ namespace Sample
             string pathSigned = "test.p7m";
 
             Document toBeSigned = new FileDocument(pathToSign);
-            AsyncSignatureTokenConnection token = new Pkcs12SignatureToken("password", pathCertificate);
+            Pkcs12SignatureToken token = new Pkcs12SignatureToken("password", pathCertificate);
             IDssPrivateKeyEntry privateKey = token.GetKeys()[0];
 
             SignatureParameters parameters = new SignatureParameters();
@@ -116,9 +116,8 @@ namespace Sample
             return;
             */
 
-            Stream iStream = service.ToBeSigned(toBeSigned, parameters);
-            byte[] signatureValue = token.Sign(iStream, parameters.DigestAlgorithm, privateKey);
-            Document signedDocument = service.SignDocument(toBeSigned, parameters, signatureValue);
+            Document signedDocument = service.SignDocument(toBeSigned, parameters, (bytes) =>
+                DigestEncrypt.Encrypt(bytes, parameters.DigestAlgorithm, privateKey));
 
             FileStream fs = new FileStream(pathSigned, FileMode.OpenOrCreate);
             Streams.PipeAll(signedDocument.OpenStream(), fs);
