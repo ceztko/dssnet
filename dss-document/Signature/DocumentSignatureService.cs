@@ -27,8 +27,8 @@ namespace EU.Europa.EC.Markt.Dss.Signature
 	{
 		public Document SignDocument(Document document, SignatureParameters parameters, IDssPrivateKeyEntry privateKey)
 		{
-			return SignDocumentInternal(document, parameters, (bytes) =>
-			   DigestEncrypt.Encrypt(bytes, parameters.DigestAlgorithm, privateKey));
+			return SignDocumentInternal(document, parameters,
+				(bytes) => privateKey.Encrypt(bytes));
 		}
 
 		public Document SignDocument(Document document, SignatureParameters parameters, DigestSigner signer)

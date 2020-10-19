@@ -9,18 +9,16 @@ using System.Text;
 namespace EU.Europa.EC.Markt.Dss.Signature.Token
 {
     /// <summary>
-    /// This class encrypt a digest in RFC3770 compliant mode
+    /// Utils class for encryption
     /// </summary>
-    public static class DigestEncrypt
+    public static class EncryptExtension
     {
-        public static byte[] Encrypt(byte[] digestValue, DigestAlgorithm digestAlgo,
-            IDssPrivateKeyEntry keyEntry)
+        public static byte[] Encrypt(this IDssPrivateKeyEntry keyEntry, byte[] digestValue)
         {
-            DigestInfo digestInfo = new DigestInfo(digestAlgo.GetAlgorithmIdentifier(), digestValue);
             IBufferedCipher cipher = CipherUtilities.GetCipher(
                 keyEntry.GetSignatureAlgorithm().GetPadding());
             cipher.Init(true, ((KSPrivateKeyEntry)keyEntry).PrivateKey);
-            return cipher.DoFinal(digestInfo.GetDerEncoded());
+            return cipher.DoFinal(digestValue);
         }
     }
 }

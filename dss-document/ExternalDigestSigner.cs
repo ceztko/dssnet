@@ -62,14 +62,17 @@ namespace EU.Europa.EC.Markt.Dss
         // Returns the signed digest
         byte[] IBlockResult.Collect()
         {
-            // The collected array contains the document hash and parameters
+            // The collected array contains the document digest and parameters
             // to be signed but it needs to be further digested by the indended
             // hashing algorithm
             byte[] toDigest = m_stream.ToArray();
             IDigest digester = DigestUtilities.GetDigest(m_digestAlgorithm.GetName());
             digester.BlockUpdate(toDigest, 0, toDigest.Length);
-            var digestValue = DigestUtilities.DoFinal(digester);
-            return signer(digestValue);
+            byte[] digestValue = DigestUtilities.DoFinal(digester);
+            // Wrap digest value in DER encoding (should be RFC3770 compliant)
+            DigestInfo digestInfo = new DigestInfo(m_digestAlgorithm.GetAlgorithmIdentifier(), digestValue);
+            byte[] wrapped = digestInfo.GetDerEncoded();
+            return signer(wrapped);
         }
 
         // Not needed

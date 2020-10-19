@@ -24,7 +24,7 @@ namespace Sample
         {
             string pathToSign = Path.Combine("Resources", "test.pdf");
             string pathCertificate = Path.Combine("Resources", "test.p12");
-            string pathSigned = "test.p7m";
+            string pathSigned = "test.pdf.p7m";
 
             Document toBeSigned = new FileDocument(pathToSign);
             Pkcs12SignatureToken token = new Pkcs12SignatureToken("password", pathCertificate);
@@ -116,8 +116,8 @@ namespace Sample
             return;
             */
 
-            Document signedDocument = service.SignDocument(toBeSigned, parameters, (bytes) =>
-                DigestEncrypt.Encrypt(bytes, parameters.DigestAlgorithm, privateKey));
+            Document signedDocument = service.SignDocument(toBeSigned, parameters,
+                (hashbytes) => privateKey.Encrypt(hashbytes));
 
             FileStream fs = new FileStream(pathSigned, FileMode.OpenOrCreate);
             Streams.PipeAll(signedDocument.OpenStream(), fs);
