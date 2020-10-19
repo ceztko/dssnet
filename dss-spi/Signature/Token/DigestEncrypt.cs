@@ -13,12 +13,9 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Token
     /// </summary>
     public static class DigestEncrypt
     {
-        public static byte[] Encrypt(byte[] toDigest, DigestAlgorithm digestAlgo,
+        public static byte[] Encrypt(byte[] digestValue, DigestAlgorithm digestAlgo,
             IDssPrivateKeyEntry keyEntry)
         {
-            IDigest digester = DigestUtilities.GetDigest(digestAlgo.GetName());
-            digester.BlockUpdate(toDigest, 0, toDigest.Length);
-            byte[] digestValue = DigestUtilities.DoFinal(digester);
             DigestInfo digestInfo = new DigestInfo(digestAlgo.GetAlgorithmIdentifier(), digestValue);
             IBufferedCipher cipher = CipherUtilities.GetCipher(
                 keyEntry.GetSignatureAlgorithm().GetPadding());

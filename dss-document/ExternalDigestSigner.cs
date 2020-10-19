@@ -2,6 +2,7 @@ using EU.Europa.EC.Markt.Dss.Signature;
 using Org.BouncyCastle.Asn1.Pkcs;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Security;
 using System;
 using System.IO;
 
@@ -61,7 +62,14 @@ namespace EU.Europa.EC.Markt.Dss
         // Returns the signed digest
         byte[] IBlockResult.Collect()
         {
-            return signer(m_stream.ToArray());
+            // The collected array contains the document hash and parameters
+            // to be signed but it needs to be further digested by the indended
+            // hashing algorithm
+            byte[] toDigest = m_stream.ToArray();
+            IDigest digester = DigestUtilities.GetDigest(m_digestAlgorithm.GetName());
+            digester.BlockUpdate(toDigest, 0, toDigest.Length);
+            var digestValue = DigestUtilities.DoFinal(digester);
+            return signer(digestValue);
         }
 
         // Not needed
