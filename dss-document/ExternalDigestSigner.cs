@@ -28,6 +28,7 @@ namespace EU.Europa.EC.Markt.Dss
         /// Bouncy castle wants to know the algorithm details (digest and encryption)
         /// to construct the CMS
         /// </summary>
+        /// <remarks>Result must be of type AlgorithmIdentifier</remarks>
         object ISignatureFactory.AlgorithmDetails
         {
             get
@@ -53,9 +54,10 @@ namespace EU.Europa.EC.Markt.Dss
 
         Stream IStreamCalculator.Stream => m_stream;
 
-        // The result must be an IBlockResult
+        /// <remarks>The result must be an IBlockResult</remarks>
         object IStreamCalculator.GetResult()
         {
+            // Result must be of type IBlockResult, su just return this
             return this;
         }
 
