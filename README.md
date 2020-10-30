@@ -10,7 +10,7 @@ It uses some open source libraries written in C#:
 ### Microsoft.Xades v1.0.0:
 - XAdES signature (XAdES 1.1.1 tried to be extended to 1.3.2)
 
-http://www.microsoft.com/france/openness/open-source/interoperabilite_xades.aspx
+https://web.archive.org/web/20160904004523/http://www.microsoft.com/france/openness/open-source/interoperabilite_xades.aspx
 
 ### DSS v2.0.2:
 - Java version ported to C# from the original European Commission DSS, using the 
@@ -18,8 +18,7 @@ Sharpen version included in NGIT by "slluis". Only ported "dss-document",
 "dss-service" and "dss-spi". 
 Note this is mostly a manual port with the help of Sharpen.
 
-https://joinup.ec.europa.eu/asset/sd-dss/description
-https://github.com/mono/ngit
+https://github.com/esig/dss
 
 ### About this release:
 - Succesfully signs and verifies CAdES-BES, CAdES-T, CAdES-C, CAdES-X and CAdES-XL.
