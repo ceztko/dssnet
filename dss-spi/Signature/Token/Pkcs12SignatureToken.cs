@@ -36,7 +36,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Token
     /// 	</version>
     public class Pkcs12SignatureToken
     {
-        private char[] password;
+        private string password;
         private FilePath pkcs12File;
 
         //jbonilla
@@ -56,7 +56,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Token
         {
             get
             {
-                return new string(password);
+                return password;
             }
         }
 
@@ -69,20 +69,6 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Token
         /// <param name="password"></param>
         /// <param name="pkcs12FilePath"></param>
         public Pkcs12SignatureToken(string password, string pkcs12FilePath)
-            : this(password
-                .ToCharArray(), new FilePath(pkcs12FilePath))
-        {
-        }
-
-        /// <summary>Create a SignatureTokenConnection with the provided password and path to PKCS#12 file.
-        /// 	</summary>
-        /// <remarks>
-        /// Create a SignatureTokenConnection with the provided password and path to PKCS#12 file. The default constructor
-        /// for Pkcs12SignatureToken.
-        /// </remarks>
-        /// <param name="password"></param>
-        /// <param name="pkcs12FilePath"></param>
-        public Pkcs12SignatureToken(char[] password, string pkcs12FilePath)
             : this(password, new FilePath(pkcs12FilePath))
         {
         }
@@ -96,25 +82,8 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Token
         /// <param name="password"></param>
         /// <param name="pkcs12FilePath"></param>
         public Pkcs12SignatureToken(string password, FilePath pkcs12File)
-            : this(password.ToCharArray(), pkcs12File)
-        {
-        }
-
-        /// <summary>Create a SignatureTokenConnection with the provided password and path to PKCS#12 file.
-        /// 	</summary>
-        /// <remarks>
-        /// Create a SignatureTokenConnection with the provided password and path to PKCS#12 file. The default constructor
-        /// for Pkcs12SignatureToken.
-        /// </remarks>
-        /// <param name="password"></param>
-        /// <param name="pkcs12FilePath"></param>
-        public Pkcs12SignatureToken(char[] password, FilePath pkcs12File)
         {
             this.password = password;
-            if (!pkcs12File.Exists())
-            {
-                throw new RuntimeException("File Not Found " + pkcs12File.GetAbsolutePath());
-            }
             this.pkcs12File = pkcs12File;
         }
 
@@ -127,7 +96,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Token
             IList<IDssPrivateKeyEntry> list = new List<IDssPrivateKeyEntry>();
             Pkcs12Store keyStore = new Pkcs12StoreBuilder().Build();
             FileInputStream input = new FileInputStream(pkcs12File);
-            keyStore.Load(input, password);
+            keyStore.Load(input, password.ToCharArray());
             input.Close();
 
             foreach (string alias in keyStore.Aliases)
