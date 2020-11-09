@@ -39,7 +39,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature
 		{
 			lock (this)
 			{
-				listeners.AddItem(listener);
+				listeners.Add(listener);
 			}
 		}
 
@@ -49,7 +49,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature
 		{
 			lock (this)
 			{
-				listeners.AddItem(listener);
+				listeners.Add(listener);
 			}
 		}
 

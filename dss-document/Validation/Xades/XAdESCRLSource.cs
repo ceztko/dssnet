@@ -57,7 +57,7 @@
 //                    CertificateFactory factory = CertificateFactory.GetInstance("X509");
 //                    byte[] derEncoded = Base64.DecodeBase64(certEl.GetTextContent());
 //                    X509Crl cert = (X509Crl)factory.GenerateCRL(new ByteArrayInputStream(derEncoded));
-//                    list.AddItem(cert);
+//                    list.Add(cert);
 //                }
 //            }
 //            catch (CertificateException e)

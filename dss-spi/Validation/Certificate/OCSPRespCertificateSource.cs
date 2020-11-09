@@ -40,15 +40,15 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Certificate
             this.ocspResp = ocspResp;
         }
 
-        public override IList<X509Certificate> GetCertificates()
+        public override IReadOnlyList<X509Certificate> GetCertificates()
         {
-            IList<X509Certificate> certs = new List<X509Certificate>();
+            var certs = new List<X509Certificate>();
             try
             {
                 //foreach (X509Certificate c in ocspResp.GetCerts(null))
                 foreach (X509Certificate c in ocspResp.GetCerts())
                 {
-                    certs.AddItem(c);
+                    certs.Add(c);
                 }
             }
             catch (OcspException)

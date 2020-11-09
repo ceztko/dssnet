@@ -28,6 +28,7 @@ using Org.BouncyCastle.Math;
 using Org.BouncyCastle.X509;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Security.Certificates;
+using System.Linq;
 
 namespace EU.Europa.EC.Markt.Dss.Validation
 {
@@ -73,7 +74,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 			{				
                 byte[] computedValue = DigestUtilities.CalculateDigest
                     (algorithm, crl.GetEncoded());             
-				return Arrays.Equals(digestValue, computedValue);
+				return Enumerable.SequenceEqual(digestValue, computedValue);
 			}
 			catch (NoSuchAlgorithmException ex)
 			{

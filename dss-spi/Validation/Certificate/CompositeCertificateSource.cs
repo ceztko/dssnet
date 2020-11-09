@@ -43,16 +43,15 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Certificate
         public virtual IList<CertificateAndContext> GetCertificateBySubjectName(X509Name
              subjectName)
         {
-            IList<CertificateAndContext> list = new List<CertificateAndContext>();
+            var list = new List<CertificateAndContext>();
             foreach (CertificateSource source in sources)
             {
                 if (source != null)
                 {
-                    IList<CertificateAndContext> @internal = source.GetCertificateBySubjectName(subjectName
-                        );
-                    if (@internal != null)
+                    var certs = source.GetCertificateBySubjectName(subjectName);
+                    if (certs != null)
                     {
-                        Sharpen.Collections.AddAll(list, @internal);
+                        list.AddRange(certs);
                     }
                 }
             }

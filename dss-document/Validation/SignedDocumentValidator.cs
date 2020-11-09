@@ -35,6 +35,7 @@ using Sharpen;
 using Org.BouncyCastle.X509;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Security.Certificates;
+using System.Linq;
 //using Sharpen.Logging;
 
 namespace EU.Europa.EC.Markt.Dss.Validation
@@ -159,11 +160,10 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 			{
 				Result counterSigResult = new Result(counterSig.CheckIntegrity(ExternalContent));
 				string counterSigAlg = counterSig.GetSignatureAlgorithm();
-				counterSigVerifs.AddItem(new SignatureVerification(counterSigResult, counterSigAlg
+				counterSigVerifs.Add(new SignatureVerification(counterSigResult, counterSigAlg
 					));
 			}
-			SignatureVerification[] ret = new SignatureVerification[counterSigVerifs.Count];
-			return Sharpen.Collections.ToArray(counterSigVerifs, ret);
+			return counterSigVerifs.ToArray();
 		}
 
 		/// <summary>Check the list of Timestamptoken.</summary>
@@ -204,7 +204,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 							));
 					}
 					CheckTimeStampCertPath(t, verif, ctx, signature);
-					tstokenVerifs.AddItem(verif);
+					tstokenVerifs.Add(verif);
 				}
 			}
 			return tstokenVerifs;
@@ -315,7 +315,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 						byte[] hash = DigestUtilities.CalculateDigest
                             (referencedCert.GetDigestAlgorithm(),
                             neededCert.GetCertificate().GetEncoded());                            
-						if (Arrays.Equals(hash, referencedCert.GetDigestValue()))
+						if (Enumerable.SequenceEqual(hash, referencedCert.GetDigestValue()))
 						{
 							found = true;
 							break;
@@ -538,7 +538,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 		/// <param name="signingCert"></param>
 		/// <returns></returns>
 		protected internal virtual bool EveryCertificateValueAreThere(ValidationContext ctx
-			, IList<X509Certificate> certificates, X509Certificate signingCert)
+			, IReadOnlyList<X509Certificate> certificates, X509Certificate signingCert)
 		{
 			foreach (CertificateAndContext neededCert in ctx.GetNeededCertificates())
 			{
@@ -666,7 +666,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 				everyNeededCertAreInSignature.SetStatus(Result.ResultStatus.VALID, null);
 				Result everyNeededRevocationData = new Result();
 				everyNeededRevocationData.SetStatus(Result.ResultStatus.VALID, null);
-				IList<X509Certificate> refs = signature.GetCertificates();
+				var refs = signature.GetCertificates();
 				if (refs.IsEmpty())
 				{
 					//LOG.Info("There is no certificate refs in the signature");
@@ -853,7 +853,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 				>();
 			foreach (AdvancedSignature signature in GetSignatures())
 			{
-				signatureInformationList.AddItem(ValidateSignature(signature, signature.GetSigningTime
+				signatureInformationList.Add(ValidateSignature(signature, signature.GetSigningTime
                     () == null ? DateTime.Now : signature.GetSigningTime().Value));
 			}
 			return new ValidationReport(timeInformation, signatureInformationList);

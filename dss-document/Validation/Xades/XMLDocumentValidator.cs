@@ -57,7 +57,7 @@
 //            for (int i = 0; i < signatureNodeList.GetLength(); i++)
 //            {
 //                Element signatureEl = (Element)signatureNodeList.Item(i);
-//                signatureInfos.AddItem(new XAdESSignature(signatureEl));
+//                signatureInfos.Add(new XAdESSignature(signatureEl));
 //            }
 //            return signatureInfos;
 //        }

@@ -70,7 +70,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Tsl
         /// <param name="condition"></param>
         public virtual void AddQualifier(string qualifier, Condition condition)
         {
-            qualifiersAndConditions.Put(qualifier, condition);
+            qualifiersAndConditions.Add(qualifier, condition);
         }
 
         /// <returns>the qualifiersAndConditions</returns>
@@ -88,11 +88,11 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Tsl
         public virtual IList<string> GetQualifiers(CertificateAndContext cert)
         {
             IList<string> list = new List<string>();
-            foreach (KeyValuePair<string, Condition> e in qualifiersAndConditions.EntrySet())
+            foreach (KeyValuePair<string, Condition> e in qualifiersAndConditions)
             {
                 if (e.Value.Check(cert))
                 {
-                    list.AddItem(e.Key);
+                    list.Add(e.Key);
                 }
             }
             return list;

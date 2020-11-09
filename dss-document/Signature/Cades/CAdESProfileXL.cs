@@ -67,42 +67,34 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 				, signingDate, optionalCertificateSource, null, null);
 			try
 			{
-				IList<X509CertificateStructure> certificateValues = new List<X509CertificateStructure
-					>();
+				var certificateValues = new List<X509CertificateStructure>();
 				List<CertificateList> crlValues = new List<CertificateList>();
 				List<BasicOcspResponse> ocspValues = new List<BasicOcspResponse>();
 				foreach (CertificateAndContext c in validationContext.GetNeededCertificates())
 				{
 					if (!c.Equals(signingCertificate))
 					{
-                        certificateValues.AddItem(X509CertificateStructure.GetInstance(((Asn1Sequence)Asn1Object.FromByteArray
+                        certificateValues.Add(X509CertificateStructure.GetInstance(((Asn1Sequence)Asn1Object.FromByteArray
                             (c.GetCertificate().GetEncoded()))));
 					}
 				}
 				foreach (X509Crl relatedcrl in validationContext.GetNeededCRL())
 				{                    
-					crlValues.AddItem(CertificateList.GetInstance((Asn1Sequence)Asn1Object.FromByteArray(((X509Crl
+					crlValues.Add(CertificateList.GetInstance((Asn1Sequence)Asn1Object.FromByteArray(((X509Crl
 						)relatedcrl).GetEncoded())));
 				}
 				foreach (BasicOcspResp relatedocspresp in validationContext.GetNeededOCSPResp())
 				{                    
-					ocspValues.AddItem((BasicOcspResponse.GetInstance((Asn1Sequence)Asn1Object.FromByteArray(
+					ocspValues.Add((BasicOcspResponse.GetInstance((Asn1Sequence)Asn1Object.FromByteArray(
 						relatedocspresp.GetEncoded()))));
 				}
-				CertificateList[] crlValuesArray = new CertificateList[crlValues.Count];
-				BasicOcspResponse[] ocspValuesArray = new BasicOcspResponse[ocspValues.Count];
-				RevocationValues revocationValues = new RevocationValues(Sharpen.Collections.ToArray
-					(crlValues, crlValuesArray), Sharpen.Collections.ToArray(ocspValues, ocspValuesArray
-					), null);
-				//unsignedAttrs.Put(PkcsObjectIdentifiers.IdAAEtsRevocationValues, new Attribute
-                unsignedAttrs.Add(PkcsObjectIdentifiers.IdAAEtsRevocationValues, new BcCms.Attribute
-					(PkcsObjectIdentifiers.IdAAEtsRevocationValues, new DerSet(revocationValues))
-					);
-				X509CertificateStructure[] certValuesArray = new X509CertificateStructure[certificateValues
-					.Count];
-				//unsignedAttrs.Put(PkcsObjectIdentifiers.IdAAEtsCertValues, new Attribute(PkcsObjectIdentifiers.IdAAEtsCertValues, new DerSet(new DerSequence(Sharpen.Collections.ToArray(certificateValues
-                unsignedAttrs.Add(PkcsObjectIdentifiers.IdAAEtsCertValues, new BcCms.Attribute(PkcsObjectIdentifiers.IdAAEtsCertValues, new DerSet(new DerSequence(Sharpen.Collections.ToArray(certificateValues
-					, certValuesArray)))));
+				RevocationValues revocationValues = new RevocationValues(crlValues.ToArray(),
+					ocspValues.ToArray(), null);
+                unsignedAttrs.Add(PkcsObjectIdentifiers.IdAAEtsRevocationValues, new BcCms.Attribute(
+					PkcsObjectIdentifiers.IdAAEtsRevocationValues, new DerSet(revocationValues)));
+                unsignedAttrs.Add(PkcsObjectIdentifiers.IdAAEtsCertValues, new BcCms.Attribute(
+					PkcsObjectIdentifiers.IdAAEtsCertValues, new DerSet(new DerSequence(
+						certificateValues.ToArray()))));
 			}
 			catch (CertificateEncodingException e)
 			{

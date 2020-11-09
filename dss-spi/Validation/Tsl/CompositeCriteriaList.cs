@@ -21,6 +21,7 @@
 using EU.Europa.EC.Markt.Dss.Validation.Certificate;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EU.Europa.EC.Markt.Dss.Validation.Tsl
 {
@@ -85,10 +86,8 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Tsl
         /// <remarks>The default constructor for CompositeCriteriaList.</remarks>
         /// <param name="composition"></param>
         /// <param name="conditions"></param>
-        public CompositeCriteriaList(CompositeCriteriaList.Composition composition, IList
-            <Condition> conditions)
-            : this(composition, Sharpen.Collections.ToArray(conditions
-                , new Condition[conditions.Count]))
+        public CompositeCriteriaList(Composition composition, IList<Condition> conditions)
+            : this(composition, conditions.ToArray())
         {
         }
 

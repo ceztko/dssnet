@@ -60,7 +60,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.X509
 			}
 			else
 			{
-				IList<X509Certificate> certs = ((OCSPRespCertificateSource)GetWrappedCertificateSource()).GetCertificates();
+				var certs = ((OCSPRespCertificateSource)GetWrappedCertificateSource()).GetCertificates();
 				foreach (X509Certificate c in certs)
 				{
 					if (IsSignedBy(c))

@@ -18,11 +18,6 @@ namespace Sharpen
             return Environment.ProcessorCount;
         }
 
-        public static long CurrentTimeMillis()
-        {
-            return DateTime.UtcNow.ToMillisecondsSinceEpoch();
-        }
-
         public static string Getenv(string var)
         {
             return Environment.GetEnvironmentVariable(var);
@@ -36,18 +31,6 @@ namespace Sharpen
                 dictionary[(string)v.Key] = (string)v.Value;
             }
             return dictionary;
-        }
-
-        public static IPAddress GetLocalHost()
-        {
-            try
-            {
-                return Dns.GetHostEntry(Dns.GetHostName()).AddressList[0];
-            }
-            catch (System.Net.Sockets.SocketException ex)
-            {
-                throw new UnknownHostException(ex);
-            }
         }
 
         static Hashtable properties;
@@ -190,11 +173,6 @@ namespace Sharpen
         public static string GetStringForBytes(byte[] chars, int start, int len)
         {
             return Encoding.UTF8.GetString(chars, start, len);
-        }
-
-        public static string GetStringForBytes(byte[] chars, int start, int len, string encoding)
-        {
-            return GetEncoding(encoding).Decode(chars, start, len);
         }
 
         public static Encoding GetEncoding(string name)

@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\dss-spi\dss-spi.csproj" />
-    <ProjectReference Include="..\Sharpen\Sharpen.csproj" />
   </ItemGroup>
 
 </Project>

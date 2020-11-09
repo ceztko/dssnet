@@ -49,9 +49,9 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Xades
             this.onlyExtended = onlyExtended;
         }
 
-        public override IList<X509Certificate> GetCertificates()
+        public override IReadOnlyList<X509Certificate> GetCertificates()
         {
-            IList<X509Certificate> list = new List<X509Certificate>();
+            var list = new List<X509Certificate>();
 
             XmlNodeList nodes;
 
@@ -65,7 +65,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Xades
                 X509Certificate cert = new X509CertificateParser().ReadCertificate(derEncoded);
                 if (!list.Contains(cert))
                 {
-                    list.AddItem(cert);
+                    list.Add(cert);
                 }
             }
 
@@ -81,7 +81,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Xades
                     X509Certificate cert = new X509CertificateParser().ReadCertificate(derEncoded);
                     if (!list.Contains(cert))
                     {
-                        list.AddItem(cert);
+                        list.Add(cert);
                     }
                 }
             }

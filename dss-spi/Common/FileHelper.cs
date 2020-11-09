@@ -72,18 +72,6 @@ namespace Sharpen
 			return File.Exists (path);
 		}
 
-		public virtual long LastModified (FilePath path)
-		{
-			if (IsFile(path)) {
-				var info2 = new FileInfo(path);
-				return info2.Exists ? info2.LastWriteTimeUtc.ToMillisecondsSinceEpoch() : 0;
-			} else if (IsDirectory (path)) {
-				var info = new DirectoryInfo(path);
-				return info.Exists ? info.LastWriteTimeUtc.ToMillisecondsSinceEpoch() : 0;
-			}
-			return 0;
-		}
-
 		public virtual long Length (FilePath path)
 		{
 			// If you call .Length on a file that doesn't exist, an exception is thrown
@@ -134,25 +122,6 @@ namespace Sharpen
 			} catch {
 				return false;
 			}
-		}
-
-		public virtual bool SetLastModified(FilePath path, long milis)
-		{
-			try {
-				DateTime utcDateTime = Extensions.MillisToDateTimeOffset(milis, 0L).UtcDateTime;
-				if (IsFile(path)) {
-					var info2 = new FileInfo(path);
-					info2.LastWriteTimeUtc = utcDateTime;
-					return true;
-				} else if (IsDirectory(path)) {
-					var info = new DirectoryInfo(path);
-					info.LastWriteTimeUtc = utcDateTime;
-					return true;
-				}
-			} catch  {
-
-			}
-			return false;
 		}
 	}
 }

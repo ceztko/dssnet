@@ -180,10 +180,9 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Report
 				return null;
 			}
 			IList<QualificationElement> elements = new List<QualificationElement>();
-			foreach (KeyValuePair<string, Condition> e in trustService.GetQualifiersAndConditions
-				().EntrySet())
+			foreach (KeyValuePair<string, Condition> e in trustService.GetQualifiersAndConditions())
 			{
-				elements.AddItem(new QualificationElement(e.Key, e.Value));
+				elements.Add(new QualificationElement(e.Key, e.Value));
 			}
 			return elements;
 		}

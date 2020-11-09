@@ -30,21 +30,13 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Certificate
     /// 	</version>
     public class ListCertificateSource : OfflineCertificateSource
     {
-        private IList<X509Certificate> certificates;
+        private IReadOnlyList<X509Certificate> certificates;
 
         /// <summary>The default constructor for ListCertificateSource.</summary>
         /// <remarks>The default constructor for ListCertificateSource.</remarks>
-        public ListCertificateSource(IList<X509Certificate> certificates)
+        public ListCertificateSource(IReadOnlyList<X509Certificate> certificates)
         {
             this.certificates = certificates;
-        }
-
-        /// <summary>The default constructor for ListCertificateSource.</summary>
-        /// <remarks>The default constructor for ListCertificateSource.</remarks>
-        public ListCertificateSource(X509Certificate[] certificates)
-            : this(Arrays.AsList
-                (certificates))
-        {
         }
 
         //jbonilla
@@ -57,7 +49,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Certificate
 		}
         */
 
-        public override IList<X509Certificate> GetCertificates()
+        public override IReadOnlyList<X509Certificate> GetCertificates()
         {
             return certificates;
         }

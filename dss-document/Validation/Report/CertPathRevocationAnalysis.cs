@@ -53,7 +53,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Report
 				foreach (CertificateAndContext cert in ctx.GetNeededCertificates())
 				{
 					CertificateVerification verif = new CertificateVerification(cert, ctx);
-					certificatePathVerification.AddItem(verif);
+					certificatePathVerification.Add(verif);
 				}
 			}
 			summary.SetStatus(Result.ResultStatus.VALID, null);

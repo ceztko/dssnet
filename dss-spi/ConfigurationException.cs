@@ -31,7 +31,7 @@ namespace EU.Europa.EC.Markt.Dss
     /// <version>$Revision: 1887 $ - $Date: 2013-04-23 14:56:09 +0200 (mar., 23 avr. 2013) $
     /// 	</version>
     [System.Serializable]
-    public class ConfigurationException : RuntimeException
+    public class ConfigurationException : Exception
     {
         private ResourceBundle bundle = ResourceBundle.GetBundle("eu/europa/ec/markt/dss/i18n"
             );

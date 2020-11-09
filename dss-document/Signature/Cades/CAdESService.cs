@@ -250,10 +250,10 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
             bool includeUnsignedAttributes, CmsSignedData originalSignedData
             )
         {
-            CmsAttributeTableGenerator signedAttrGen = new DefaultSignedAttributeTableGenerator(
+            var signedAttrGen = new DefaultSignedAttributeTableGenerator(
                 new AttributeTable(cadesProfile.GetSignedAttributes(parameters)));
 
-            CmsAttributeTableGenerator unsignedAttrGen = new SimpleAttributeTableGenerator(
+            var unsignedAttrGen = new SimpleAttributeTableGenerator(
                 includeUnsignedAttributes
                 ? new AttributeTable(cadesProfile.GetUnsignedAttributes(parameters))
                 : null);

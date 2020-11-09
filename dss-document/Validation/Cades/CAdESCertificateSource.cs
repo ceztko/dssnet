@@ -73,9 +73,9 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 			this.onlyExtended = onlyExtended;
 		}
 
-		public override IList<X509Certificate> GetCertificates()
+		public override IReadOnlyList<X509Certificate> GetCertificates()
 		{
-			IList<X509Certificate> list = new List<X509Certificate>();
+			var list = new List<X509Certificate>();
 			try
 			{
 				if (!onlyExtended)
@@ -91,7 +91,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 						//LOG.Info("Certificate for subject " + c.SubjectDN);
 						if (!list.Contains(c))
 						{
-							list.AddItem(c);
+							list.Add(c);
 						}
 					}
 				}
@@ -107,7 +107,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
                         X509Certificate c = new X509Certificate(cs);
 						if (!list.Contains(c))
 						{
-							list.AddItem(c);
+							list.Add(c);
 						}
 					}
 				}

@@ -39,7 +39,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature
         public X509Certificate SigningCertificate { get; set; }
 
         /// <summary>Get or Set the certificate chain</summary>		
-        public IList<X509Certificate> CertificateChain { get; set; }
+        public IReadOnlyList<X509Certificate> CertificateChain { get; set; }
 
         /// <summary>Return or Set the type of signature policy</summary>
         public SignaturePolicy SignaturePolicy { get; set; }
@@ -80,7 +80,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature
         public string Location { get; set; }
 
         /// <returns>the commitmentTypeIndication</returns>
-        public IList<string> CommitmentTypeIndication { get; set; }
+        public IReadOnlyList<string> CommitmentTypeIndication { get; set; }
 
         public SignatureParameters()
         {
@@ -94,11 +94,10 @@ namespace EU.Europa.EC.Markt.Dss.Signature
 		/// <param name="certificateChain"></param>
 		public void SetCertificateChain(params X509Certificate[] certificateChain)
 		{
-			IList<X509Certificate> list = new List<X509Certificate>();
+			var list = new List<X509Certificate>();
 			foreach (X509Certificate c in certificateChain)
-			{
-				list.AddItem((X509Certificate)c);
-			}
+				list.Add(c);
+
 			this.CertificateChain = list;
 		}
 	}

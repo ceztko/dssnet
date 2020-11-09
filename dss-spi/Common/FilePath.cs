@@ -84,29 +84,6 @@ namespace Sharpen
 			return new FilePath (Path.GetTempFileName ());
 		}
 
-		public static FilePath CreateTempFile (string prefix, string suffix)
-		{
-			return CreateTempFile (prefix, suffix, null);
-		}
-
-		public static FilePath CreateTempFile (string prefix, string suffix, FilePath directory)
-		{
-			string file;
-			if (prefix == null) {
-				throw new ArgumentNullException ("prefix");
-			}
-			if (prefix.Length < 3) {
-				throw new ArgumentException ("prefix must have at least 3 characters");
-			}
-			string str = (directory == null) ? Path.GetTempPath () : directory.GetPath ();
-			do {
-				file = Path.Combine (str, prefix + Interlocked.Increment (ref tempCounter) + suffix);
-			} while (File.Exists (file));
-			
-			new FileOutputStream (file).Close ();
-			return new FilePath (file);
-		}
-
 		public bool Delete ()
 		{
 			try {
@@ -178,37 +155,9 @@ namespace Sharpen
 			return FileHelper.Instance.IsFile (this);
 		}
 
-		public long LastModified ()
-		{
-			return FileHelper.Instance.LastModified (this);
-		}
-
 		public long Length ()
 		{
 			return FileHelper.Instance.Length (this);
-		}
-
-		public string[] List ()
-		{
-			return List (null);
-		}
-
-		public string[] List (FilenameFilter filter)
-		{
-			try {
-				if (IsFile ())
-					return null;
-				List<string> list = new List<string> ();
-				foreach (string filePth in Directory.GetFileSystemEntries (path)) {
-					string fileName = Path.GetFileName (filePth);
-					if ((filter == null) || filter.Accept (this, fileName)) {
-						list.Add (fileName);
-					}
-				}
-				return list.ToArray ();
-			} catch {
-				return null;
-			}
 		}
 
 		public FilePath[] ListFiles ()
@@ -268,11 +217,6 @@ namespace Sharpen
 		public bool RenameTo (string name)
 		{
 			return FileHelper.Instance.RenameTo (this, name);
-		}
-
-		public bool SetLastModified (long milis)
-		{
-			return FileHelper.Instance.SetLastModified(this, milis);
 		}
 
 		public bool SetReadOnly ()

@@ -40,7 +40,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Report
 
 		private IList<TimestampVerificationResult> timestampsVerification;
 
-		private IList<X509Certificate> certificates;
+		private IReadOnlyList<X509Certificate> certificates;
 
 		private DateTime signingTime;
 
@@ -95,7 +95,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Report
 		/// <returns></returns>
 		/// <seealso cref="EU.Europa.EC.Markt.Dss.Validation.AdvancedSignature.GetCertificates()
 		/// 	">EU.Europa.EC.Markt.Dss.Validation.AdvancedSignature.GetCertificates()</seealso>
-		public virtual IList<X509Certificate> GetCertificates()
+		public virtual IReadOnlyList<X509Certificate> GetCertificates()
 		{
 			return certificates;
 		}

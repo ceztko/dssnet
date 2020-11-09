@@ -120,7 +120,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Token
 
                 AsymmetricKeyParameter privateKey = keyStore.GetKey(alias).Key;
 
-                list.AddItem(new KSPrivateKeyEntry(chain[0], chain, privateKey));
+                list.Add(new KSPrivateKeyEntry(chain[0], chain, privateKey));
             }
             this.keys = list;
 

@@ -253,7 +253,7 @@
 //                    );
 //                if (tstoken != null)
 //                {
-//                    signatureTimestamps.AddItem(tstoken);
+//                    signatureTimestamps.Add(tstoken);
 //                }
 //            }
 //            return signatureTimestamps;
@@ -272,7 +272,7 @@
 //                        .SIGNATURE_TIMESTAMP);
 //                    if (tstoken != null)
 //                    {
-//                        signatureTimestamps.AddItem(tstoken);
+//                        signatureTimestamps.Add(tstoken);
 //                    }
 //                }
 //                return signatureTimestamps;
@@ -296,7 +296,7 @@
 //                        .VALIDATION_DATA_TIMESTAMP);
 //                    if (tstoken != null)
 //                    {
-//                        signatureTimestamps.AddItem(tstoken);
+//                        signatureTimestamps.Add(tstoken);
 //                    }
 //                }
 //                return signatureTimestamps;
@@ -320,7 +320,7 @@
 //                        .VALIDATION_DATA_REFSONLY_TIMESTAMP);
 //                    if (tstoken != null)
 //                    {
-//                        signatureTimestamps.AddItem(tstoken);
+//                        signatureTimestamps.Add(tstoken);
 //                    }
 //                }
 //                return signatureTimestamps;
@@ -344,7 +344,7 @@
 //                        .ARCHIVE_TIMESTAMP);
 //                    if (tstoken != null)
 //                    {
-//                        signatureTimestamps.AddItem(tstoken);
+//                        signatureTimestamps.Add(tstoken);
 //                    }
 //                }
 //                return signatureTimestamps;
@@ -442,7 +442,7 @@
 //                                (), XMLUtils.GetElement(signatureElement, "./ds:SignatureValue"))))
 //                            {
 //                                LOG.Info("Reference verification succeeded, adding countersignature");
-//                                xadesList.AddItem(xCounterSig);
+//                                xadesList.Add(xCounterSig);
 //                            }
 //                            else
 //                            {
@@ -501,7 +501,7 @@
 //                    string algorithm = digestAlgorithmEl.GetAttribute("Algorithm");
 //                    genericCertId.SetDigestAlgorithm(GetShortAlgoName(algorithm));
 //                    genericCertId.SetDigestValue(Base64.DecodeBase64(digestValueEl.GetTextContent()));
-//                    certIds.AddItem(genericCertId);
+//                    certIds.Add(genericCertId);
 //                }
 //                return certIds;
 //            }
@@ -559,7 +559,7 @@
 //                        CRLRef @ref = new CRLRef();
 //                        @ref.SetAlgorithm(digestAlgo);
 //                        @ref.SetDigestValue(Base64.DecodeBase64(digestValueEl.GetTextContent()));
-//                        certIds.AddItem(@ref);
+//                        certIds.Add(@ref);
 //                    }
 //                }
 //                return certIds;
@@ -594,7 +594,7 @@
 //                        }
 //                        string algorithm = digestAlgorithmEl.GetAttribute("Algorithm");
 //                        string digestAlgo = GetShortAlgoName(algorithm);
-//                        certIds.AddItem(new OCSPRef(digestAlgo, Base64.DecodeBase64(digestValueEl.GetTextContent
+//                        certIds.Add(new OCSPRef(digestAlgo, Base64.DecodeBase64(digestValueEl.GetTextContent
 //                            ()), false));
 //                    }
 //                }
@@ -681,27 +681,27 @@
 //                IList<Node> timeStampNodesXadesX1 = new List<Node>();
 //                Element signatureValue = XMLUtils.GetElement(signatureElement, "./ds:SignatureValue"
 //                    );
-//                timeStampNodesXadesX1.AddItem(signatureValue);
+//                timeStampNodesXadesX1.Add(signatureValue);
 //                NodeList signatureTimeStampNode = XMLUtils.GetNodeList(signatureElement, "./ds:Object/xades:QualifyingProperties/xades:UnsignedProperties/xades:UnsignedSignatureProperties"
 //                     + "/xades:SignatureTimeStamp");
 //                if (signatureTimeStampNode != null)
 //                {
 //                    for (int i = 0; i < signatureTimeStampNode.GetLength(); i++)
 //                    {
-//                        timeStampNodesXadesX1.AddItem(signatureTimeStampNode.Item(i));
+//                        timeStampNodesXadesX1.Add(signatureTimeStampNode.Item(i));
 //                    }
 //                }
 //                Node completeCertificateRefsNode = XMLUtils.GetElement(signatureElement, "./ds:Object/xades:QualifyingProperties/xades:UnsignedProperties/xades:UnsignedSignatureProperties"
 //                     + "/xades:CompleteCertificateRefs");
 //                if (completeCertificateRefsNode != null)
 //                {
-//                    timeStampNodesXadesX1.AddItem(completeCertificateRefsNode);
+//                    timeStampNodesXadesX1.Add(completeCertificateRefsNode);
 //                }
 //                Node completeRevocationRefsNode = XMLUtils.GetElement(signatureElement, "./ds:Object/xades:QualifyingProperties/xades:UnsignedProperties/xades:UnsignedSignatureProperties"
 //                     + "/xades:CompleteRevocationRefs");
 //                if (completeRevocationRefsNode != null)
 //                {
-//                    timeStampNodesXadesX1.AddItem(completeRevocationRefsNode);
+//                    timeStampNodesXadesX1.Add(completeRevocationRefsNode);
 //                }
 //                return GetC14nValue(timeStampNodesXadesX1);
 //            }
@@ -720,13 +720,13 @@
 //                     + "/xades:CompleteCertificateRefs");
 //                if (completeCertificateRefsNode != null)
 //                {
-//                    timeStampNodesXadesX1.AddItem(completeCertificateRefsNode);
+//                    timeStampNodesXadesX1.Add(completeCertificateRefsNode);
 //                }
 //                Node completeRevocationRefsNode = XMLUtils.GetElement(signatureElement, "./ds:Object/xades:QualifyingProperties/xades:UnsignedProperties/xades:UnsignedSignatureProperties"
 //                     + "xades:CompleteRevocationRefs");
 //                if (completeRevocationRefsNode != null)
 //                {
-//                    timeStampNodesXadesX1.AddItem(completeRevocationRefsNode);
+//                    timeStampNodesXadesX1.Add(completeRevocationRefsNode);
 //                }
 //                return GetC14nValue(timeStampNodesXadesX1);
 //            }
@@ -768,12 +768,12 @@
 //                }
 //                IList<Node> timeStampNodesXadesA = new List<Node>();
 //                Element signedInfo = XMLUtils.GetElement(signatureElement, "./ds:SignedInfo");
-//                timeStampNodesXadesA.AddItem(signedInfo);
+//                timeStampNodesXadesA.Add(signedInfo);
 //                Element signatureValue = XMLUtils.GetElement(signatureElement, "./ds:SignatureValue"
 //                    );
-//                timeStampNodesXadesA.AddItem(signatureValue);
+//                timeStampNodesXadesA.Add(signatureValue);
 //                Element keyInfo = XMLUtils.GetElement(signatureElement, "./ds:KeyInfo");
-//                timeStampNodesXadesA.AddItem(keyInfo);
+//                timeStampNodesXadesA.Add(keyInfo);
 //                Element unsignedSignaturePropertiesNode = GetUnsignedSignatureProperties(signatureElement
 //                    );
 //                NodeList unsignedProperties = unsignedSignaturePropertiesNode.GetChildNodes();
@@ -792,7 +792,7 @@
 //                            }
 //                            count++;
 //                        }
-//                        timeStampNodesXadesA.AddItem(unsignedProperty);
+//                        timeStampNodesXadesA.Add(unsignedProperty);
 //                    }
 //                }
 //                buffer.Write(GetC14nValue(timeStampNodesXadesA));

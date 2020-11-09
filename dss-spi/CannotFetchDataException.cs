@@ -28,7 +28,7 @@ namespace EU.Europa.EC.Markt.Dss
     /// <version>$Revision: 1887 $ - $Date: 2013-04-23 14:56:09 +0200 (mar., 23 avr. 2013) $
     /// 	</version>
     [System.Serializable]
-    public class CannotFetchDataException : RuntimeException
+    public class CannotFetchDataException : Exception
     {
         private const long serialVersionUID = -1112490792269827445L;
 
@@ -53,13 +53,8 @@ namespace EU.Europa.EC.Markt.Dss
         /// <summary>The default constructor for BadPasswordException.</summary>
         /// <remarks>The default constructor for BadPasswordException.</remarks>
         /// <param name="message"></param>
-        public CannotFetchDataException(CannotFetchDataException.MSG message, string serviceName
-            )
+        public CannotFetchDataException(MSG message, string serviceName)
         {
-            if (message == null)
-            {
-                throw new ArgumentException("Cannot build Exception without a message");
-            }
             this.key = message;
         }
 
@@ -67,9 +62,7 @@ namespace EU.Europa.EC.Markt.Dss
         /// <remarks>The default constructor for CannotFetchDataException.</remarks>
         /// <param name="ex"></param>
         public CannotFetchDataException(IOException ex, string serviceName)
-            : this(ex is
-                UnknownHostException ? CannotFetchDataException.MSG.UNKNOWN_HOST_EXCEPTION : CannotFetchDataException.MSG
-                .IO_EXCEPTION, serviceName)
+            : this(MSG.IO_EXCEPTION, serviceName)
         {
             cause = ex;
             this.serviceName = serviceName;

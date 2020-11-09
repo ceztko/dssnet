@@ -79,18 +79,18 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
                         //TODO jbonilla - Se debería validar hasta qué punto se extendió (BES, T, C, X, XL).
                         if(si.UnsignedAttributes.Count == 0)
                         {
-                            siArray.AddItem(ExtendCMSSignature(signedData, si, parameters, originalData));
+                            siArray.Add(ExtendCMSSignature(signedData, si, parameters, originalData));
                         }
                         else
                         {
                             //LOG.Error("Already extended?");
-                            siArray.AddItem(si);
+                            siArray.Add(si);
                         }                        
                     }
                     catch (IOException)
                     {
                         //LOG.Error("Exception when extending signature");
-                        siArray.AddItem(si);
+                        siArray.Add(si);
                     }
                 }
 				
@@ -123,12 +123,12 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 					{
 						try
 						{
-							siArray.AddItem(ExtendCMSSignature(signedData, si, parameters, originalData));
+							siArray.Add(ExtendCMSSignature(signedData, si, parameters, originalData));
 						}
 						catch (IOException)
 						{
 							//LOG.Error("Exception when extending signature");
-							siArray.AddItem(si);
+							siArray.Add(si);
 						}
 					}
 				}
@@ -206,12 +206,12 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
                 SignerInformation si = (SignerInformation)infos.Current;
 				try
 				{
-					siArray.AddItem(ExtendCMSSignature(signedData, si, parameters, originalData));
+					siArray.Add(ExtendCMSSignature(signedData, si, parameters, originalData));
 				}
 				catch (IOException)
 				{
 					//LOG.Error("Exception when extending signature");
-					siArray.AddItem(si);
+					siArray.Add(si);
 				}
 			}
 			SignerInformationStore newSignerStore = new SignerInformationStore(siArray);

@@ -47,14 +47,10 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 	{
 		private bool padesUsage;
 
-		/// <summary>The default constructor for CAdESProfileBES.</summary>
-		/// <remarks>The default constructor for CAdESProfileBES.</remarks>
 		public CAdESProfileBES() : this(false)
 		{
 		}
 
-		/// <summary>The default constructor for CAdESProfileBES.</summary>
-		/// <remarks>The default constructor for CAdESProfileBES.</remarks>
 		public CAdESProfileBES(bool padesUsage)
 		{
 			this.padesUsage = padesUsage;
@@ -62,35 +58,23 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 
 		private Attribute MakeSigningCertificateAttribute(SignatureParameters parameters)
 		{
-			try
+			byte[] certHash = DigestUtilities.CalculateDigest(
+				parameters.DigestAlgorithm.GetName(),
+                parameters.SigningCertificate.GetEncoded());
+                
+			if (parameters.DigestAlgorithm == DigestAlgorithm.SHA1)
 			{
-				byte[] certHash = DigestUtilities.CalculateDigest
-                    (parameters.DigestAlgorithm.GetName(),
-                    parameters.SigningCertificate.GetEncoded());
-                    
-				if (parameters.DigestAlgorithm == DigestAlgorithm.SHA1)
-				{
-					SigningCertificate sc = new SigningCertificate(new EssCertID(certHash));
-					return new Attribute(PkcsObjectIdentifiers.IdAASigningCertificate, new DerSet(sc
-						));
-				}
-				else
-				{
-					EssCertIDv2 essCert = new EssCertIDv2(new AlgorithmIdentifier(parameters.DigestAlgorithm
-						.GetOid()), certHash);
-					SigningCertificateV2 scv2 = new SigningCertificateV2(new EssCertIDv2[] { essCert }
-						);
-					return new Attribute(PkcsObjectIdentifiers.IdAASigningCertificateV2, new DerSet
-						(scv2));
-				}
+				SigningCertificate sc = new SigningCertificate(new EssCertID(certHash));
+				return new Attribute(PkcsObjectIdentifiers.IdAASigningCertificate, new DerSet(sc
+					));
 			}
-			catch (NoSuchAlgorithmException e)
+			else
 			{
-				throw new RuntimeException(e);
-			}
-			catch (CertificateException e)
-			{
-				throw new RuntimeException(e);
+				EssCertIDv2 essCert = new EssCertIDv2(new AlgorithmIdentifier(parameters.DigestAlgorithm
+					.GetOid()), certHash);
+				SigningCertificateV2 scv2 = new SigningCertificateV2(new EssCertIDv2[] { essCert }
+					);
+				return new Attribute(PkcsObjectIdentifiers.IdAASigningCertificateV2, new DerSet(scv2));
 			}
 		}
 
@@ -111,23 +95,20 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
         //internal virtual IDictionary<DerObjectIdentifier, Asn1Encodable> GetSignedAttributes
 		internal virtual IDictionary GetSignedAttributes
 			(SignatureParameters parameters)
-		{
-            //IDictionary<DerObjectIdentifier, Asn1Encodable> signedAttrs = new Dictionary<DerObjectIdentifier            
-            IDictionary signedAttrs = new Dictionary<DerObjectIdentifier
+		{          
+            var signedAttrs = new Dictionary<DerObjectIdentifier
                 , Asn1Encodable>();
-			Attribute signingCertificateReference = MakeSigningCertificateAttribute(parameters
-				);
-			signedAttrs.Add((DerObjectIdentifier)signingCertificateReference.AttrType, 
-				signingCertificateReference);
+			Attribute signingCertificateReference = MakeSigningCertificateAttribute(parameters);
+			signedAttrs.Add(signingCertificateReference.AttrType, signingCertificateReference);
 			if (!padesUsage)
 			{
-				signedAttrs.Add(PkcsObjectIdentifiers.Pkcs9AtSigningTime, MakeSigningTimeAttribute
-					(parameters));
+				signedAttrs.Add(PkcsObjectIdentifiers.Pkcs9AtSigningTime,
+					MakeSigningTimeAttribute(parameters));
 			}
 			if (!padesUsage && parameters.ClaimedSignerRole != null)
 			{
-				signedAttrs.Add(PkcsObjectIdentifiers.IdAAEtsSignerAttr, MakeSignerAttrAttribute
-					(parameters));
+				signedAttrs.Add(PkcsObjectIdentifiers.IdAAEtsSignerAttr,
+					MakeSignerAttrAttribute(parameters));
 			}
 			return signedAttrs;
 		}

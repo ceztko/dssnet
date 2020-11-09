@@ -30,6 +30,7 @@ using Org.BouncyCastle.X509;
 using EU.Europa.EC.Markt.Dss.Validation.Certificate;
 using Org.BouncyCastle.Security.Certificates;
 using Org.BouncyCastle.Security;
+using System.Linq;
 
 namespace EU.Europa.EC.Markt.Dss.Validation.X509
 {
@@ -95,8 +96,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.X509
 
 		public virtual X509Name GetSignerSubjectName()
 		{
-            ICollection<X509Certificate> certs = ((CAdESCertificateSource)GetWrappedCertificateSource()).GetCertificates
-				();
+            var certs = ((CAdESCertificateSource)GetWrappedCertificateSource()).GetCertificates();
 			foreach (X509Certificate cert in certs)
 			{
 				if (timeStamp.SignerID.Match(cert))
@@ -164,8 +164,8 @@ namespace EU.Europa.EC.Markt.Dss.Validation.X509
 			string hashAlgorithm = timeStamp.TimeStampInfo.HashAlgorithm.ObjectID.Id;			
             byte[] computedDigest = DigestUtilities.CalculateDigest
                 (hashAlgorithm, data);                
-			return Arrays.Equals(computedDigest, timeStamp.TimeStampInfo.GetMessageImprintDigest
-				());
+			return Enumerable.SequenceEqual(computedDigest,
+				timeStamp.TimeStampInfo.GetMessageImprintDigest());
 		}
 
 		/// <summary>Retrieve the timestamp generation date</summary>

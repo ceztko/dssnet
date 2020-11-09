@@ -19,6 +19,7 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
 using EU.Europa.EC.Markt.Dss.Validation;
 using EU.Europa.EC.Markt.Dss.Validation.Report;
 using Sharpen;
@@ -57,14 +58,8 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Report
 			> signatureAndRefsTimestampsVerification, IList<TimestampVerificationResult> referencesTimestampsVerification
 			) : base(levelReached)
 		{
-			TimestampVerificationResult[] array1 = new TimestampVerificationResult[signatureAndRefsTimestampsVerification
-				.Count];
-			this.signatureAndRefsTimestampsVerification = Sharpen.Collections.ToArray(signatureAndRefsTimestampsVerification
-				, array1);
-			TimestampVerificationResult[] array2 = new TimestampVerificationResult[referencesTimestampsVerification
-				.Count];
-			this.referencesTimestampsVerification = Sharpen.Collections.ToArray(referencesTimestampsVerification
-				, array2);
+			this.signatureAndRefsTimestampsVerification = signatureAndRefsTimestampsVerification.ToArray();
+			this.referencesTimestampsVerification = referencesTimestampsVerification.ToArray();
 		}
 
 		/// <returns>the signatureAndRefsTimestampsVerification</returns>

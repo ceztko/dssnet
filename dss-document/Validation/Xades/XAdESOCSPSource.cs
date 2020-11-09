@@ -54,7 +54,7 @@
 //                {
 //                    Element certEl = (Element)nodeList.Item(i);
 //                    byte[] derEncoded = Base64.DecodeBase64(certEl.GetTextContent());
-//                    list.AddItem((BasicOCSPResp)new OCSPResp(derEncoded).GetResponseObject());
+//                    list.Add((BasicOCSPResp)new OCSPResp(derEncoded).GetResponseObject());
 //                }
 //            }
 //            catch (OCSPException e)

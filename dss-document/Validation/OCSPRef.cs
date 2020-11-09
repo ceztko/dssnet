@@ -27,6 +27,7 @@ using Sharpen;
 using Org.BouncyCastle.Utilities.Encoders;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Crypto;
+using System.Linq;
 //using Sharpen.Logging;
 
 namespace EU.Europa.EC.Markt.Dss.Validation
@@ -81,7 +82,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 				//LOG.Info("Compare " + Hex.ToHexString(digestValue) + " to computed value " + 
 				//	Hex.ToHexString(computedValue) + " of BasicOcspResp produced at " + ocspResp
 				//	.ProducedAt);
-				return Arrays.Equals(digestValue, computedValue);
+				return Enumerable.SequenceEqual(digestValue, computedValue);
 			}
 			catch (NoSuchAlgorithmException ex)
 			{

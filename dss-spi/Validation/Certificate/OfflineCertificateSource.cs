@@ -51,7 +51,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Certificate
                 {
                     CertificateAndContext cc = new CertificateAndContext(cert);
                     cc.SetCertificateSource(sourceType);
-                    list.AddItem(cc);
+                    list.Add(cc);
                 }
             }
             return list;
@@ -60,6 +60,6 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Certificate
         /// <summary>Retrieve the list of certificate from this source.</summary>
         /// <remarks>Retrieve the list of certificate from this source.</remarks>
         /// <returns></returns>
-        public abstract IList<X509Certificate> GetCertificates();
+        public abstract IReadOnlyList<X509Certificate> GetCertificates();
     }
 }

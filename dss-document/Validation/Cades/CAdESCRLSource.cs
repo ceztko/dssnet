@@ -86,7 +86,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
                 foreach (X509Crl crl in cmsSignedData.GetCrls
 					("Collection").GetMatches(null))
 				{					
-					list.AddItem(crl);
+					list.Add(crl);
 				}
 				// Add certificates in CAdES-XL certificate-values inside SignerInfo attribute if present
 				SignerInformation si = cmsSignedData.GetSignerInfos().GetFirstSigner(signerId);
@@ -96,7 +96,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 					foreach (CertificateList crlObj in revValues.GetCrlVals())
 					{
 						X509Crl crl = new X509Crl(crlObj);
-						list.AddItem(crl);
+						list.Add(crl);
 					}
 				}
 			}

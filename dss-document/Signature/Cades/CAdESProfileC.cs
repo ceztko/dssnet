@@ -166,7 +166,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 				{
 					if (!c.Equals(signingCertificate))
 					{
-						completeCertificateRefs.AddItem(MakeOtherCertID(c.GetCertificate()));
+						completeCertificateRefs.Add(MakeOtherCertID(c.GetCertificate()));
 					}
 					// certificateValues.add(new X509CertificateStructure((Asn1Sequence) Asn1Object.fromByteArray(c
 					// .getCertificate().getEncoded())));
@@ -174,27 +174,20 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
 					List<OcspResponsesID> ocspListIDValues = new List<OcspResponsesID>();
 					foreach (X509Crl relatedcrl in validationContext.GetRelatedCRLs(c))
 					{
-						crlListIdValues.AddItem(MakeCrlValidatedID((X509Crl)relatedcrl));
+						crlListIdValues.Add(MakeCrlValidatedID((X509Crl)relatedcrl));
 					}
 					foreach (BasicOcspResp relatedocspresp in validationContext.GetRelatedOCSPResp(c))
 					{
-						ocspListIDValues.AddItem(MakeOcspResponsesID(relatedocspresp));
+						ocspListIDValues.Add(MakeOcspResponsesID(relatedocspresp));
 					}
-					CrlValidatedID[] crlListIdArray = new CrlValidatedID[crlListIdValues.Count];
-					OcspResponsesID[] ocspListIDArray = new OcspResponsesID[ocspListIDValues.Count];
-					completeRevocationRefs.AddItem(new CrlOcspRef(new CrlListID(Sharpen.Collections.ToArray
-						(crlListIdValues, crlListIdArray)), new OcspListID(Sharpen.Collections.ToArray(ocspListIDValues
-						, ocspListIDArray)), null));
+					completeRevocationRefs.Add(new CrlOcspRef(new CrlListID(crlListIdValues.ToArray()),
+						new OcspListID(ocspListIDValues.ToArray()), null));
 				}
-				OtherCertID[] otherCertIDArray = new OtherCertID[completeCertificateRefs.Count];
-				CrlOcspRef[] crlOcspRefArray = new CrlOcspRef[completeRevocationRefs.Count];
-				//unsignedAttrs.Put(PkcsObjectIdentifiers.IdAAEtsCertificateRefs, new Attribute(
                 unsignedAttrs.Add(PkcsObjectIdentifiers.IdAAEtsCertificateRefs, new BcCms.Attribute(
-					PkcsObjectIdentifiers.IdAAEtsCertificateRefs, new DerSet(new DerSequence(Sharpen.Collections.ToArray
-					(completeCertificateRefs, otherCertIDArray)))));
-                //unsignedAttrs.Put(PkcsObjectIdentifiers.IdAAEtsRevocationRefs, new Attribute(PkcsObjectIdentifiers.IdAAEtsRevocationRefs, new DerSet(new DerSequence(Sharpen.Collections.ToArray
-				unsignedAttrs.Add(PkcsObjectIdentifiers.IdAAEtsRevocationRefs, new BcCms.Attribute(PkcsObjectIdentifiers.IdAAEtsRevocationRefs, new DerSet(new DerSequence(Sharpen.Collections.ToArray
-					(completeRevocationRefs, crlOcspRefArray)))));
+					PkcsObjectIdentifiers.IdAAEtsCertificateRefs, new DerSet(new DerSequence(completeCertificateRefs.ToArray()))));
+				unsignedAttrs.Add(PkcsObjectIdentifiers.IdAAEtsRevocationRefs,
+					new BcCms.Attribute(PkcsObjectIdentifiers.IdAAEtsRevocationRefs,
+					new DerSet(new DerSequence(completeRevocationRefs.ToArray()))));
 			}
 			catch (NoSuchAlgorithmException e)
 			{

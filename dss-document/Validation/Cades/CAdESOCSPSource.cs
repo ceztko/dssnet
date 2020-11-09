@@ -85,7 +85,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 				foreach (BasicOcspResponse ocspObj in revValues.GetOcspVals())
 				{
 					BasicOcspResp bOcspObj = new BasicOcspResp(ocspObj);
-					list.AddItem(bOcspObj);
+					list.Add(bOcspObj);
 				}
 			}
 			return list;

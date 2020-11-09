@@ -63,7 +63,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 
 		/// <summary>Get certificates embedded in the signature</summary>
 		/// <reutrn>a list of certificate contained in the signature</reutrn>
-		IList<X509Certificate> GetCertificates();
+		IReadOnlyList<X509Certificate> GetCertificates();
 
 		/// <summary>Gets a CRL source for the CRLs embedded in the signature</summary>
 		/// <returns></returns>

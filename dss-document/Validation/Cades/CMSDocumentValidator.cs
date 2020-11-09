@@ -61,7 +61,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 			{
 				SignerInformation i = (SignerInformation)o;
 				CAdESSignature info = new CAdESSignature(this.cmsSignedData, i.SignerID);
-				infos.AddItem(info);
+				infos.Add(info);
 			}
 			return infos;
 		}

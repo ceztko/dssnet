@@ -65,9 +65,9 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Certificate
             this.password = password;
         }
 
-        public override IList<X509Certificate> GetCertificates()
+        public override IReadOnlyList<X509Certificate> GetCertificates()
         {
-            IList<X509Certificate> certificates = new List<X509Certificate>();
+            var certificates = new List<X509Certificate>();
             try
             {
                 throw new System.NotImplementedException();

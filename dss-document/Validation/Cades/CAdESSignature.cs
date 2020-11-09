@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using EU.Europa.EC.Markt.Dss.Signature;
@@ -135,7 +136,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 		public virtual X509Certificate GetSigningCertificate()
 		{
 			//LOG.Info("SignerInformation " + signerInformation.SignerID);
-			ICollection<X509Certificate> certs = GetCertificates();
+			var certs = GetCertificates();
 			foreach (X509Certificate cert in certs)
 			{
 				//LOG.Info("Test match for certificate " + cert.SubjectDN.ToString());
@@ -147,7 +148,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 			return null;
 		}
 
-		public virtual IList<X509Certificate> GetCertificates()
+		public virtual IReadOnlyList<X509Certificate> GetCertificates()
 		{
 			return ((CAdESCertificateSource)GetCertificateSource()).GetCertificates();
 		}
@@ -270,7 +271,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 					{
 						TimeStampToken token = new TimeStampToken(new CmsSignedData(value.GetDerEncoded()
 							));
-						tstokens.AddItem(new TimestampToken(token, timestampType));
+						tstokens.Add(new TimestampToken(token, timestampType));
 					}
 					catch (Exception e)
 					{
@@ -379,7 +380,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 				SignerInformation i = (SignerInformation)o;
 				EU.Europa.EC.Markt.Dss.Validation.Cades.CAdESSignature info = new EU.Europa.EC.Markt.Dss.Validation.Cades.CAdESSignature
 					(this.cmsSignedData, i.SignerID);
-				counterSigs.AddItem(info);
+				counterSigs.Add(info);
 			}
 			return counterSigs;
 		}
@@ -414,7 +415,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 								certId.SetIssuerSerial(otherCertId.IssuerSerial.Serial.ToString());
 							}
 						}
-						list.AddItem(certId);
+						list.Add(certId);
 					}
 				}
 			}
@@ -437,7 +438,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 						CrlOcspRef otherCertId = CrlOcspRef.GetInstance(completeCertificateRefs[i1]);
 						foreach (CrlValidatedID id in otherCertId.CrlIDs.GetCrls())
 						{
-							list.AddItem(new CRLRef(id));
+							list.Add(new CRLRef(id));
 						}
 					}
 				}
@@ -461,7 +462,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 						CrlOcspRef otherCertId = CrlOcspRef.GetInstance(completeRevocationRefs[i1]);
 						foreach (OcspResponsesID id in otherCertId.OcspIDs.GetOcspResponses())
 						{
-							list.AddItem(new OCSPRef(id, true));
+							list.Add(new OCSPRef(id, true));
 						}
 					}
 				}
@@ -567,17 +568,14 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 			}
 			if (signerInformation.UnsignedAttributes != null)
 			{
-				Asn1EncodableVector original = signerInformation.UnsignedAttributes.ToAsn1EncodableVector
-					();
+				Asn1EncodableVector original = signerInformation.UnsignedAttributes.ToAsn1EncodableVector();
 				IList<BcCms.Attribute> timeStampToRemove = GetTimeStampToRemove(index);
 				Asn1EncodableVector filtered = new Asn1EncodableVector();
 				for (int i = 0; i < original.Count; i++)
 				{
 					Asn1Encodable enc = original[i];
 					if (!timeStampToRemove.Contains(enc))
-					{
 						filtered.Add(original[i]);
-					}
 				}
 				SignerInformation filteredInfo = SignerInformation.ReplaceUnsignedAttributes(signerInformation
 					, new BcCms.AttributeTable(filtered));
@@ -614,7 +612,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 
         private IList<BcCms.Attribute> GetTimeStampToRemove(int archiveTimeStampToKeep)
 		{
-			IList<BcCms.Attribute> ts = new List<BcCms.Attribute>();
+			var ts = new List<BcCms.Attribute>();
 			if (signerInformation.UnsignedAttributes != null)
 			{
 				Asn1EncodableVector v = signerInformation.UnsignedAttributes.GetAll(id_aa_ets_archiveTimestampV2
@@ -622,12 +620,12 @@ namespace EU.Europa.EC.Markt.Dss.Validation.Cades
 				for (int i = 0; i < v.Count; i++)
 				{
 					Asn1Encodable enc = v[i];
-					ts.AddItem((BcCms.Attribute)enc);
+					ts.Add((BcCms.Attribute)enc);
 				}
 				ts.Sort(new CAdESSignature.AttributeTimeStampComparator(this));
 				for (int i_1 = 0; i_1 < archiveTimeStampToKeep; i_1++)
 				{
-					ts.Remove(0);
+					ts.RemoveAt(0);
 				}
 			}
 			return ts;

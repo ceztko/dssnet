@@ -122,7 +122,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 
 		internal virtual SignedToken GetOneNotYetVerifiedToken()
 		{
-			foreach (KeyValuePair<SignedToken, RevocationData> e in revocationInfo.EntrySet())
+			foreach (KeyValuePair<SignedToken, RevocationData> e in revocationInfo)
 			{
 				if (e.Value == null)
 				{
@@ -206,16 +206,16 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 			{
 				//LOG.Info("New token to validate " + signedToken + " hashCode " + signedToken.GetHashCode
 				//	());
-				revocationInfo.Put(signedToken, null);
+				revocationInfo.Add(signedToken, null);
 				if (signedToken is CRLToken)
 				{
-					neededCRL.AddItem(((CRLToken)signedToken).GetX509crl());
+					neededCRL.Add(((CRLToken)signedToken).GetX509crl());
 				}
 				else
 				{
 					if (signedToken is OCSPRespToken)
 					{
-						neededOCSPResp.AddItem(((OCSPRespToken)signedToken).GetOcspResp());
+						neededOCSPResp.Add(((OCSPRespToken)signedToken).GetOcspResp());
 					}
 					else
 					{
@@ -234,7 +234,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 							}
 							if (!found)
 							{
-								neededCertificates.AddItem(newCert);
+								neededCertificates.Add(newCert);
 							}
 						}
 					}
@@ -256,7 +256,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 			{
 				throw new ArgumentException(signedToken + " must be a key of revocationInfo");
 			}
-			revocationInfo.Put(signedToken, data);
+			revocationInfo.Add(signedToken, data);
 		}
 
 		/// <summary>Validate the timestamp</summary>
@@ -372,7 +372,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 		internal virtual int VerifiedTokenCount()
 		{
 			int count = 0;
-			foreach (KeyValuePair<SignedToken, RevocationData> e in revocationInfo.EntrySet())
+			foreach (KeyValuePair<SignedToken, RevocationData> e in revocationInfo)
 			{
 				if (e.Value != null)
 				{
@@ -386,7 +386,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 		{
 			int count = 0;
 			StringBuilder builder = new StringBuilder();
-			foreach (KeyValuePair<SignedToken, RevocationData> e in revocationInfo.EntrySet())
+			foreach (KeyValuePair<SignedToken, RevocationData> e in revocationInfo)
 			{
 				if (e.Value != null)
 				{
@@ -517,7 +517,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 			{
 				if (ConcernsCertificate(crl, cert))
 				{
-					crls.AddItem(crl);
+					crls.Add(crl);
 				}
 			}
 			return crls;
@@ -541,7 +541,7 @@ namespace EU.Europa.EC.Markt.Dss.Validation
 			{
 				if (this.ConcernsCertificate(ocspresp, cert))
 				{
-					ocspresps.AddItem(ocspresp);
+					ocspresps.Add(ocspresp);
 				}
 			}
 			return ocspresps;

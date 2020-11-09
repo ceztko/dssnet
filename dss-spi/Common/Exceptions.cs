@@ -28,16 +28,7 @@ using System;
 
 namespace Sharpen
 {
-
-	public class CharacterCodingException : Exception
-	{
-	}
-
 	public class MissingResourceException : Exception
-	{
-	}
-
-	public class NoSuchElementException : Exception
 	{
 	}
 
@@ -56,35 +47,6 @@ namespace Sharpen
 		}
 
 		public RuntimeException (string msg, Exception ex) : base(msg, ex)
-		{
-		}
-	}
-
-	public class UnknownHostException : Exception
-	{
-
-		public UnknownHostException (Exception ex): base ("Host not found", ex)
-		{
-		}
-	}
-	
-	class ConnectException: Exception
-	{
-		public ConnectException (string msg): base (msg)
-		{
-		}
-	}
-	
-	class IllegalCharsetNameException: Exception
-	{
-		public IllegalCharsetNameException (string msg): base (msg)
-		{
-		}
-	}
-	
-	class UnsupportedCharsetException: Exception
-	{
-		public UnsupportedCharsetException (string msg): base (msg)
 		{
 		}
 	}
