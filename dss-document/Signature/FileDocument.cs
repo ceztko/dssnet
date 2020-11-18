@@ -52,7 +52,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature
 		/// <exception cref="System.IO.IOException"></exception>
 		public virtual Stream OpenStream()
 		{            
-			return File.OpenRead(file);
+			return File.OpenRead(file.GetPath());
 		}
 
 		public virtual bool Exists()

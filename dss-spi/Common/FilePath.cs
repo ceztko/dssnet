@@ -8,7 +8,6 @@ namespace Sharpen
 	public class FilePath
 	{
 		private string path;
-		private static long tempCounter;
 
 		public FilePath ()
 		{
@@ -21,7 +20,7 @@ namespace Sharpen
 		}
 
 		public FilePath (FilePath other, string child)
-			: this ((string) other, child)
+			: this (other.path, child)
 		{
 
 		}
@@ -46,11 +45,6 @@ namespace Sharpen
 			return new FilePath (name);
 		}
 
-		public static implicit operator string (FilePath filePath)
-		{
-			return filePath == null ? null : filePath.path;
-		}
-		
 		public override bool Equals (object obj)
 		{
 			FilePath other = obj as FilePath;
@@ -62,11 +56,6 @@ namespace Sharpen
 		public override int GetHashCode ()
 		{
 			return path.GetHashCode ();
-		}
-
-		public bool CanWrite ()
-		{
-			return FileHelper.Instance.CanWrite (this);
 		}
 
 		public bool CreateNewFile ()
@@ -84,23 +73,9 @@ namespace Sharpen
 			return new FilePath (Path.GetTempFileName ());
 		}
 
-		public bool Delete ()
+		public bool Exists()
 		{
-			try {
-				return FileHelper.Instance.Delete (this);
-			} catch (Exception exception) {
-				Console.WriteLine (exception);
-				return false;
-			}
-		}
-
-		public void DeleteOnExit ()
-		{
-		}
-
-		public bool Exists ()
-		{
-			return FileHelper.Instance.Exists (this);
+			return FileHelper.Exists(path);
 		}
 
 		public FilePath GetAbsoluteFile ()
@@ -142,22 +117,22 @@ namespace Sharpen
 
 		public bool IsAbsolute ()
 		{
-			return Path.IsPathRooted (path);
+			return Path.IsPathRooted(path);
 		}
 
 		public bool IsDirectory ()
 		{
-			return FileHelper.Instance.IsDirectory (this);
+			return Directory.Exists(path);
 		}
 
 		public bool IsFile ()
 		{
-			return FileHelper.Instance.IsFile (this);
+			return File.Exists(path);
 		}
 
 		public long Length ()
 		{
-			return FileHelper.Instance.Length (this);
+			return FileHelper.Length (path);
 		}
 
 		public FilePath[] ListFiles ()
@@ -174,71 +149,10 @@ namespace Sharpen
 				return null;
 			}
 		}
-
-		static void MakeDirWritable (string dir)
-		{
-			FileHelper.Instance.MakeDirWritable (dir);
-		}
-
-		static void MakeFileWritable (string file)
-		{
-			FileHelper.Instance.MakeFileWritable (file);
-		}
-
-		public bool Mkdir ()
-		{
-			try {
-				if (Directory.Exists (path))
-					return false;
-				Directory.CreateDirectory (path);
-				return true;
-			} catch (Exception) {
-				return false;
-			}
-		}
-
-		public bool Mkdirs ()
-		{
-			try {
-				if (Directory.Exists (path))
-					return false;
-				Directory.CreateDirectory (this.path);
-				return true;
-			} catch {
-				return false;
-			}
-		}
-
-		public bool RenameTo (FilePath file)
-		{
-			return RenameTo (file.path);
-		}
-
-		public bool RenameTo (string name)
-		{
-			return FileHelper.Instance.RenameTo (this, name);
-		}
-
-		public bool SetReadOnly ()
-		{
-			return FileHelper.Instance.SetReadOnly (this);
-		}
 		
 		public Uri ToURI ()
 		{
 			return new Uri (path);
-		}
-		
-		// Don't change the case of this method, since ngit does reflection on it
-		public bool canExecute ()
-		{
-			return FileHelper.Instance.CanExecute (this);
-		}
-		
-		// Don't change the case of this method, since ngit does reflection on it
-		public bool setExecutable (bool exec)
-		{
-			return FileHelper.Instance.SetExecutable (this, exec);
 		}
 		
 		public string GetParent ()
