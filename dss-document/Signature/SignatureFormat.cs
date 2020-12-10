@@ -49,28 +49,6 @@ namespace EU.Europa.EC.Markt.Dss.Signature
         public static readonly EU.Europa.EC.Markt.Dss.Signature.SignatureFormat CAdES_A =
             new EU.Europa.EC.Markt.Dss.Signature.SignatureFormat("CAdES_A");
 
-
-        public static readonly EU.Europa.EC.Markt.Dss.Signature.SignatureFormat XAdES_BES
-             = new EU.Europa.EC.Markt.Dss.Signature.SignatureFormat("XAdES_BES");
-
-        public static readonly EU.Europa.EC.Markt.Dss.Signature.SignatureFormat XAdES_EPES
-             = new EU.Europa.EC.Markt.Dss.Signature.SignatureFormat("XAdES_EPES");
-
-        public static readonly EU.Europa.EC.Markt.Dss.Signature.SignatureFormat XAdES_T =
-            new EU.Europa.EC.Markt.Dss.Signature.SignatureFormat("XAdES_T");
-
-        public static readonly EU.Europa.EC.Markt.Dss.Signature.SignatureFormat XAdES_C =
-            new EU.Europa.EC.Markt.Dss.Signature.SignatureFormat("XAdES_C");
-
-        public static readonly EU.Europa.EC.Markt.Dss.Signature.SignatureFormat XAdES_X =
-            new EU.Europa.EC.Markt.Dss.Signature.SignatureFormat("XAdES_X");
-
-        public static readonly EU.Europa.EC.Markt.Dss.Signature.SignatureFormat XAdES_XL =
-            new EU.Europa.EC.Markt.Dss.Signature.SignatureFormat("XAdES_XL");
-
-        public static readonly EU.Europa.EC.Markt.Dss.Signature.SignatureFormat XAdES_A =
-            new EU.Europa.EC.Markt.Dss.Signature.SignatureFormat("XAdES_A");
-
         private string name;
 
         /// <summary>The default constructor for MimeTypes.</summary>
@@ -111,20 +89,6 @@ namespace EU.Europa.EC.Markt.Dss.Signature
                     return CAdES_XL;
                 case "cadesa":
                     return CAdES_A;
-                case "xadesbes":
-                    return XAdES_BES;
-                case "xadesepes":
-                    return XAdES_EPES;
-                case "xadest":
-                    return XAdES_T;
-                case "xadesc":
-                    return XAdES_C;
-                case "xadesx":
-                    return XAdES_X;
-                case "xadesxl":
-                    return XAdES_XL;
-                case "xadesa":
-                    return XAdES_A;
             }
 
             throw new ArgumentException(name);

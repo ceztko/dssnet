@@ -229,6 +229,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
             */
         }
 
+        /*
         /// <exception cref="System.IO.IOException"></exception>
         public override Document ExtendDocument(Document document, Document originalDocument
             , SignatureParameters parameters)
@@ -244,6 +245,7 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
             }
             return document;
         }
+        */
 
         private CmsSignedDataGenerator CreateCMSSignedDataGenerator(ISignatureFactory factory,
             SignatureParameters parameters, CAdESProfileBES cadesProfile,

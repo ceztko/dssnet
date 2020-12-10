@@ -36,9 +36,6 @@ namespace EU.Europa.EC.Markt.Dss.Signature
 			return SignDocumentInternal(document, parameters, signer);
 		}
 
-		public abstract Document ExtendDocument(Document document, Document originalDocument, SignatureParameters
-			 parameters);
-
 		protected abstract Document SignDocumentInternal(Document document, SignatureParameters parameters, DigestSigner signer);
 	}
 }
