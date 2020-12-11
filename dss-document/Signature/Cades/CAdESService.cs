@@ -255,14 +255,18 @@ namespace EU.Europa.EC.Markt.Dss.Signature.Cades
             var signedAttrGen = new DefaultSignedAttributeTableGenerator(
                 new AttributeTable(cadesProfile.GetSignedAttributes(parameters)));
 
-            var unsignedAttrGen = new SimpleAttributeTableGenerator(
-                includeUnsignedAttributes
-                ? new AttributeTable(cadesProfile.GetUnsignedAttributes(parameters))
-                : null);
+            SimpleAttributeTableGenerator unsignedAttrGen = null;
+            if (includeUnsignedAttributes)
+            {
+                var attributes = cadesProfile.GetUnsignedAttributes(parameters);
+                if (attributes.Count != 0)
+                    unsignedAttrGen = new SimpleAttributeTableGenerator(new AttributeTable(attributes));
+            }
 
             SignerInfoGeneratorBuilder sigInfoGeneratorBuilder = new SignerInfoGeneratorBuilder();
             sigInfoGeneratorBuilder.WithSignedAttributeGenerator(signedAttrGen);
-            sigInfoGeneratorBuilder.WithUnsignedAttributeGenerator(unsignedAttrGen);
+            if (unsignedAttrGen != null)
+                sigInfoGeneratorBuilder.WithUnsignedAttributeGenerator(unsignedAttrGen);
 
             CmsSignedDataGenerator generator = new CmsSignedDataGenerator();
             generator.AddSignerInfoGenerator(sigInfoGeneratorBuilder.Build(factory, parameters.SigningCertificate));
