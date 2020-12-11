@@ -30,13 +30,16 @@ namespace EU.Europa.EC.Markt.Dss
     public sealed class DigestAlgorithm
     {
         public static readonly EU.Europa.EC.Markt.Dss.DigestAlgorithm SHA1 = new EU.Europa.EC.Markt.Dss.DigestAlgorithm
-            ("SHA-1", "1.3.14.3.2.26", /*DigestMethod.SHA1*/"SHA1");
+            ("SHA-1", "1.3.14.3.2.26", "SHA1");
 
         public static readonly EU.Europa.EC.Markt.Dss.DigestAlgorithm SHA256 = new EU.Europa.EC.Markt.Dss.DigestAlgorithm
-            ("SHA-256", "2.16.840.1.101.3.4.2.1", /*DigestMethod.SHA256*/"SHA256");
+            ("SHA-256", "2.16.840.1.101.3.4.2.1", "SHA256");
+
+        public static readonly EU.Europa.EC.Markt.Dss.DigestAlgorithm SHA384 = new EU.Europa.EC.Markt.Dss.DigestAlgorithm
+            ("SHA-384", "2.16.840.1.101.3.4.2.2", "SHA384");
 
         public static readonly EU.Europa.EC.Markt.Dss.DigestAlgorithm SHA512 = new EU.Europa.EC.Markt.Dss.DigestAlgorithm
-            ("SHA-512", "2.16.840.1.101.3.4.2.3", /*DigestMethod.SHA512*/"SHA512");
+            ("SHA-512", "2.16.840.1.101.3.4.2.3", "SHA512");
 
         private string name;
 
@@ -65,6 +68,10 @@ namespace EU.Europa.EC.Markt.Dss
             if ("SHA-256".Equals(algoName))
             {
                 return SHA256;
+            }
+            if ("SHA-384".Equals(algoName))
+            {
+                return SHA384;
             }
             if ("SHA-512".Equals(algoName))
             {

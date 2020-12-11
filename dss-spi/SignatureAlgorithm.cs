@@ -102,56 +102,6 @@ namespace EU.Europa.EC.Markt.Dss
             throw new NotSupportedException();
         }
 
-        public string GetXMLSignatureAlgorithm(DigestAlgorithm digestAlgo)
-        {
-            if (this.Equals(EU.Europa.EC.Markt.Dss.SignatureAlgorithm.RSA))
-            {
-                if (digestAlgo.Equals(DigestAlgorithm.SHA1))
-                {
-                    return "http://www.w3.org/2000/09/xmldsig#rsa-sha1";
-                }
-                else
-                {
-                    if (digestAlgo.Equals(DigestAlgorithm.SHA256))
-                    {
-                        return "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256";
-                    }
-                    else
-                    {
-                        if (digestAlgo.Equals(DigestAlgorithm.SHA256))
-                        {
-                            return "http://www.w3.org/2001/04/xmldsig-more#rsa-sha512";
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if (this.Equals(EU.Europa.EC.Markt.Dss.SignatureAlgorithm.ECDSA))
-                {
-                    if (digestAlgo.Equals(DigestAlgorithm.SHA1))
-                    {
-                        return "http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha1";
-                    }
-                    else
-                    {
-                        if (digestAlgo.Equals(DigestAlgorithm.SHA256))
-                        {
-                            return "http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256";
-                        }
-                        else
-                        {
-                            if (digestAlgo.Equals(DigestAlgorithm.SHA256))
-                            {
-                                return "http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha512";
-                            }
-                        }
-                    }
-                }
-            }
-            throw new NotSupportedException();
-        }
-
         /// <returns>the name</returns>
         public string GetName()
         {

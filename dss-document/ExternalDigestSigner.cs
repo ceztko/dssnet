@@ -33,16 +33,17 @@ namespace EU.Europa.EC.Markt.Dss
         {
             get
             {
-                switch (m_digestAlgorithm.GetName())
+                string algorithmName = m_digestAlgorithm.GetName();
+                switch (algorithmName)
                 {
-                    case "SHA-1":
-                        return new AlgorithmIdentifier(PkcsObjectIdentifiers.Sha1WithRsaEncryption);
                     case "SHA-256":
                         return new AlgorithmIdentifier(PkcsObjectIdentifiers.Sha256WithRsaEncryption);
+                    case "SHA-384":
+                        return new AlgorithmIdentifier(PkcsObjectIdentifiers.Sha384WithRsaEncryption);
                     case "SHA-512":
                         return new AlgorithmIdentifier(PkcsObjectIdentifiers.Sha512WithRsaEncryption);
                     default:
-                        throw new NotSupportedException();
+                        throw new NotSupportedException($"Unsupported digest algorithm {algorithmName}");
                 }
             }
         }
